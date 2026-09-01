@@ -12,6 +12,7 @@ import { EndpointFleetGrid } from "@/entities/ransomeye/ui/EndpointFleetGrid";
 import { RiskGauge } from "@/entities/ransomeye/ui/RiskGauge";
 import { ThreatFeed } from "@/entities/ransomeye/ui/ThreatFeed";
 import { BehaviorTimeline } from "@/entities/ransomeye/ui/BehaviorTimeline";
+import { EvidenceChain } from "@/entities/ransomeye/ui/EvidenceChain";
 import { ForecastPanel } from "@/entities/ransomeye/ui/ForecastPanel";
 import { ContainmentPanel } from "@/entities/ransomeye/ui/ContainmentPanel";
 import { CopilotPanel } from "@/entities/ransomeye/ui/CopilotPanel";
@@ -140,6 +141,14 @@ export function RansomwareClient() {
 
           {selectedEndpointId && (
             <BehaviorTimeline ticks={revealedTicks} endpointId={selectedEndpointId} />
+          )}
+
+          {selectedEndpointId && (
+            <EvidenceChain
+              ticks={revealedTicks}
+              endpointId={selectedEndpointId}
+              state={selectedState}
+            />
           )}
 
           {selectedEndpointId && (
