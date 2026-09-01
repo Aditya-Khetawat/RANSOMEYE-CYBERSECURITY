@@ -13,6 +13,7 @@ import { RiskGauge } from "@/entities/ransomeye/ui/RiskGauge";
 import { ThreatFeed } from "@/entities/ransomeye/ui/ThreatFeed";
 import { BehaviorTimeline } from "@/entities/ransomeye/ui/BehaviorTimeline";
 import { EvidenceChain } from "@/entities/ransomeye/ui/EvidenceChain";
+import { NetworkTopology } from "@/entities/ransomeye/ui/NetworkTopology";
 import { ForecastPanel } from "@/entities/ransomeye/ui/ForecastPanel";
 import { ContainmentPanel } from "@/entities/ransomeye/ui/ContainmentPanel";
 import { CopilotPanel } from "@/entities/ransomeye/ui/CopilotPanel";
@@ -150,6 +151,15 @@ export function RansomwareClient() {
               state={selectedState}
             />
           )}
+
+          <NetworkTopology
+            endpoints={run.endpoints}
+            states={currentStates}
+            alert={activeAlerts[0]}
+            contained={contained}
+            selectedEndpointId={selectedEndpointId}
+            onSelect={setSelectedEndpointId}
+          />
 
           {selectedEndpointId && (
             <div className="grid lg:grid-cols-3 gap-4 items-start">
