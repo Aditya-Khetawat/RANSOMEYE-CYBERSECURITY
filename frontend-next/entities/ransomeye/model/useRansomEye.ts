@@ -110,8 +110,8 @@ export const useContainment = () => {
   return { getPlan, approveAction, isLoading };
 };
 
-/** POST /ransomeye/copilot — imperative chat turn, same shape as
- * entities/alertengine's useAssistant. */
+/** POST /ransomeye/copilot — imperative chat turn: not cacheable, so a
+ * plain callback rather than an SWR hook. */
 export const useRansomEyeCopilot = () => {
   const api = useApi();
   const [isAsking, setIsAsking] = useState(false);

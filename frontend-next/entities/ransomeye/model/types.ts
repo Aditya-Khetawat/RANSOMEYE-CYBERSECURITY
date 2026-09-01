@@ -1,7 +1,8 @@
 /**
  * Types for the RansomEye FastAPI backend (backend/app/ransomeye/*).
- * Mirror the shapes the backend actually returns — same convention as
- * entities/alertengine/model/types.ts.
+ * Mirror the shapes the backend actually returns, captured from live
+ * responses — not an OpenAPI generation. The backend is the source of
+ * truth; nothing here should drive a backend change.
  */
 
 export type RiskLevel = "low" | "medium" | "high" | "critical";

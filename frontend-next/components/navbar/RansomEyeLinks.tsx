@@ -6,22 +6,6 @@ import { Disclosure } from "@headlessui/react";
 import { IoChevronUp } from "react-icons/io5";
 import { IconType } from "react-icons/lib";
 import clsx from "clsx";
-import { IoMdGitMerge } from "react-icons/io";
-import { TbTopologyRing, TbTimeline, TbChartDots3 } from "react-icons/tb";
-import { LuWorkflow, LuGauge, LuBrainCircuit } from "react-icons/lu";
-import { VscDebugDisconnect } from "react-icons/vsc";
-import {
-  AiOutlineAlert,
-  AiOutlineFire,
-  AiOutlineGroup,
-  AiOutlineHome,
-} from "react-icons/ai";
-import {
-  MdOutlineNotificationsActive,
-  MdOutlineRuleFolder,
-  MdOutlineEventBusy,
-} from "react-icons/md";
-import { HiOutlineCog6Tooth, HiOutlineSparkles } from "react-icons/hi2";
 import { TbBiohazard } from "react-icons/tb";
 
 type NavLink = {
@@ -38,132 +22,24 @@ type NavSection = {
   links: NavLink[];
 };
 
-// Sections mirror KeepHQ's sidebar grouping. `isDemo` marks surfaces backed by
-// sample data rather than the RansomEye API.
+// RansomEye is a single-purpose product (ransomware early warning) — the
+// alert-correlation engine's own multi-section sidebar (Alerts, Incidents,
+// Noise Reduction, Insights, Platform) was the *inspiration* codebase's
+// navigation, not this product's. Removed along with the frontend page
+// routes and UI components it pointed to. The backend engine itself
+// (backend/app/*.py) stays — RansomEye's detection core reuses its LLM
+// plumbing internally (see backend/app/ransomeye/assistant_bridge.py) — but
+// none of it is exposed as separate user-facing pages any more.
 const SECTIONS: NavSection[] = [
   {
     title: "OVERVIEW",
     links: [
       {
         href: "/",
-        label: "Home",
-        icon: AiOutlineHome,
-        testId: "home",
-        isExact: true,
-      },
-    ],
-  },
-  {
-    title: "RANSOMEYE",
-    links: [
-      {
-        href: "/ransomware",
         label: "Ransomware Early Warning",
         icon: TbBiohazard,
-        testId: "ransomware",
-      },
-    ],
-  },
-  {
-    title: "ALERTS",
-    links: [
-      { href: "/feed", label: "Alert Feed", icon: AiOutlineAlert, testId: "feed" },
-      { href: "/firing", label: "Firing", icon: AiOutlineFire, testId: "firing" },
-      { href: "/5xx", label: "Critical 5xx", icon: AiOutlineGroup, testId: "critical" },
-    ],
-  },
-  {
-    title: "INCIDENTS",
-    links: [
-      {
-        href: "/incidents",
-        label: "Incidents",
-        icon: MdOutlineNotificationsActive,
-        testId: "incidents",
-      },
-      { href: "/forecast", label: "Forecast", icon: LuGauge, testId: "forecast" },
-      {
-        href: "/timemachine",
-        label: "Time Machine",
-        icon: TbTimeline,
-        testId: "timemachine",
-      },
-    ],
-  },
-  {
-    title: "NOISE REDUCTION",
-    links: [
-      {
-        href: "/deduplication",
-        label: "Deduplication",
-        icon: IoMdGitMerge,
-        testId: "deduplication",
-      },
-      {
-        href: "/correlations",
-        label: "Correlations",
-        icon: TbChartDots3,
-        testId: "correlations",
-      },
-      {
-        href: "/topology",
-        label: "Service Topology",
-        icon: TbTopologyRing,
-        testId: "topology",
-      },
-      {
-        href: "/rules",
-        label: "Rules",
-        icon: MdOutlineRuleFolder,
-        testId: "rules",
-      },
-    ],
-  },
-  {
-    title: "INSIGHTS",
-    links: [
-      {
-        href: "/evaluation",
-        label: "Evaluation",
-        icon: LuBrainCircuit,
-        testId: "evaluation",
-      },
-      { href: "/pipeline", label: "Pipeline", icon: LuWorkflow, testId: "pipeline" },
-      { href: "/ai", label: "AI", icon: HiOutlineSparkles, testId: "ai" },
-    ],
-  },
-  {
-    title: "PLATFORM",
-    links: [
-      {
-        href: "/workflows",
-        label: "Workflows",
-        icon: LuWorkflow,
-        testId: "workflows",
-      },
-      {
-        href: "/providers",
-        label: "Providers",
-        icon: VscDebugDisconnect,
-        testId: "providers",
-      },
-      {
-        href: "/notifications-hub",
-        label: "Notifications",
-        icon: MdOutlineNotificationsActive,
-        testId: "notifications-hub",
-      },
-      {
-        href: "/maintenance",
-        label: "Maintenance",
-        icon: MdOutlineEventBusy,
-        testId: "maintenance",
-      },
-      {
-        href: "/settings",
-        label: "Settings",
-        icon: HiOutlineCog6Tooth,
-        testId: "settings",
+        testId: "home",
+        isExact: true,
       },
     ],
   },

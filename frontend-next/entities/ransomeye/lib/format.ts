@@ -1,8 +1,8 @@
 import type { Color } from "@tremor/react";
 import type { RiskLevel, TelemetryEvent } from "../model/types";
 
-/** Risk level -> Tremor colour. Same palette convention as
- * entities/alertengine/lib/format.ts's riskColor, extended with "critical". */
+/** Risk level -> Tremor colour, extended with "critical" beyond the usual
+ * high/medium/low bucket. */
 export const riskColor = (level: RiskLevel | string): Color => {
   switch (level?.toLowerCase()) {
     case "critical":
@@ -36,8 +36,7 @@ export const FACTOR_WEIGHT_MAX: Record<string, number> = {
   network_abnormality: 20,
 };
 
-/** Simulated telemetry timestamps are naive local ISO strings, same
- * convention as entities/alertengine/lib/format.ts's parseTimestamp. */
+/** Simulated telemetry timestamps are naive local ISO strings. */
 export const formatTickTime = (ts: string): string => {
   const d = new Date(ts);
   if (Number.isNaN(d.getTime())) return ts;
