@@ -2,12 +2,9 @@
 
 import { useState } from "react";
 import { Menu } from "@headlessui/react";
-import { LinkWithIcon } from "components/LinkWithIcon";
 import { Session } from "next-auth";
 import { useConfig } from "utils/hooks/useConfig";
 import { AuthType } from "@/utils/authenticationType";
-import Link from "next/link";
-import { VscDebugDisconnect } from "react-icons/vsc";
 import { useFloating } from "@floating-ui/react";
 import { Subtitle } from "@tremor/react";
 import UserAvatar from "./UserAvatar";
@@ -33,7 +30,7 @@ const UserDropdown = ({ session }: UserDropdownProps) => {
   if (!session || !session.user) {
     return null;
   }
-  const { userRole, user } = session;
+  const { user } = session;
   const { name, image, email } = user;
 
   const isNoAuth = configData?.AUTH_TYPE === AuthType.NOAUTH;
@@ -57,17 +54,6 @@ const UserDropdown = ({ session }: UserDropdownProps) => {
         as="ul"
       >
         <div className="px-1 py-1 ">
-          {userRole !== "noc" && (
-            <li>
-              <Menu.Item
-                as={Link}
-                href="/settings"
-                className="ui-active:bg-orange-400 ui-active:text-white ui-not-active:text-gray-900 group flex w-full items-center rounded-md px-2 py-2 text-sm"
-              >
-                Settings
-              </Menu.Item>
-            </li>
-          )}
           {canChangePassword && (
             <li>
               <Menu.Item
@@ -108,18 +94,11 @@ type UserInfoProps = {
 
 export const UserInfo = ({ session }: UserInfoProps) => {
   return (
-    <>
-      <ul className="space-y-2 p-2">
-        <li>
-          <LinkWithIcon href="/pipeline" icon={VscDebugDisconnect}>
-            <Subtitle className="text-xs">Pipeline Status</Subtitle>
-          </LinkWithIcon>
-        </li>
-        <div className="flex items-center gap-2">
-          {session && <UserDropdown session={session} />}
-          <ThemeControl className="text-sm size-10 flex-shrink-0 flex items-center justify-center font-medium rounded-lg focus:ring focus:ring-orange-300 hover:!bg-stone-200/50" />
-        </div>
-      </ul>
-    </>
+    <ul className="space-y-2 p-2">
+      <div className="flex items-center gap-2">
+        {session && <UserDropdown session={session} />}
+        <ThemeControl className="text-sm size-10 flex-shrink-0 flex items-center justify-center font-medium rounded-lg focus:ring focus:ring-orange-300 hover:!bg-stone-200/50" />
+      </div>
+    </ul>
   );
 };
