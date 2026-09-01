@@ -421,10 +421,21 @@ The application is architected for **zero-cost deployment** on modern PaaS platf
 
 | Layer | Platform | Details |
 |-------|----------|---------|
-| **Frontend** | **Vercel** | Connect the GitHub repo and deploy `frontend-next/`. API requests are proxied to the backend via middleware rewrites — zero CORS issues. |
-| **Backend** | **Render** | Deploy as a Python Web Service on Render's Free Tier. TF-IDF (not heavy neural nets) means the entire backend runs comfortably within **512MB RAM**. Set `CEREBRAS_API_KEY` in the dashboard. |
+| **Backend** | **Render** | Deploy as a Python Web Service on Render's Free Tier using the [`render.yaml`](./render.yaml) Blueprint at the repo root — reads `backend/requirements.txt`, runs `uvicorn app.main:app`. Set `CEREBRAS_API_KEY` in the dashboard (never committed). TF-IDF (not heavy neural nets) means the entire backend runs comfortably within **512MB RAM**. |
+| **Frontend** | **Vercel** | Import the GitHub repo, set **Root Directory** to `frontend-next`. API requests are proxied to the backend via middleware rewrites — zero CORS issues. Required env vars: `API_URL` (your Render backend URL), `NEXTAUTH_URL` (your Vercel URL), `NEXTAUTH_SECRET` (`openssl rand -hex 32`), `AUTH_TYPE=NO_AUTH`, `DISABLE_REDIRECTS=true`, `PUSHER_DISABLED=true`, `POSTHOG_DISABLED=true`, `SENTRY_DISABLED=true`. |
 
-**Live deployment:** [**hpe-hackathon-alert-correlation-ded-eta.vercel.app**](https://hpe-hackathon-alert-correlation-ded-eta.vercel.app)
+### One-click backend deploy
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Aditya-Khetawat/RANSOMEYE-CYBERSECURITY)
+
+Click the button, connect your GitHub account when prompted, set `CEREBRAS_API_KEY` when asked, and Render reads [`render.yaml`](./render.yaml) to configure everything else automatically. Copy the resulting `https://<service>.onrender.com` URL for the frontend's `API_URL`.
+
+### Frontend deploy
+
+1. [vercel.com/new](https://vercel.com/new) → **Import Git Repository** → select `RANSOMEYE-CYBERSECURITY`.
+2. Set **Root Directory** to `frontend-next`.
+3. Add the environment variables listed above (`API_URL` = your Render backend URL from step above).
+4. Deploy — Vercel auto-detects Next.js 15, no build config needed.
 
 ---
 
