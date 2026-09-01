@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Text, Title } from "@tremor/react";
+import { GeistSans } from "geist/font/sans";
+import { Text } from "@tremor/react";
 import { useLoadScenario, useRansomEyeState } from "@/entities/ransomeye";
 import type { ScenarioName } from "@/entities/ransomeye";
 import { ScenarioControls } from "@/entities/ransomeye/ui/ScenarioControls";
@@ -66,10 +67,17 @@ export function RansomwareClient() {
   const selectedState = selectedEndpointId ? currentStates[selectedEndpointId] : undefined;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className={`${GeistSans.className} flex flex-col gap-4`}>
       <div>
-        <Title>RansomEye — Real-Time Ransomware Early Warning</Title>
-        <Text className="text-sm text-gray-500">
+        <div className="flex items-center gap-2 mb-1.5">
+          <span className="text-[11px] font-semibold tracking-[0.14em] uppercase text-red-500">
+            AI-Powered · Real-Time Detection
+          </span>
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">
+          Ransomware Early Warning
+        </h1>
+        <Text className="text-sm text-gray-500 mt-1 max-w-2xl">
           Behavioral detection across file-system, process, privilege and network telemetry — built on the alert correlation engine&apos;s pipeline architecture, with a new ransomware-specific detection core.
         </Text>
       </div>
