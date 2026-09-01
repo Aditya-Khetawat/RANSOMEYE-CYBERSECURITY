@@ -11,7 +11,15 @@ import { useContainment } from "../model/useRansomEye";
  * ones (suspend process, isolate endpoint, block indicator) come back
  * pending and only change state when an operator explicitly approves them
  * here — this prototype never executes them on its own. */
-export function ContainmentPanel({ endpointId }: { endpointId: string }) {
+export function ContainmentPanel({
+  endpointId,
+  onContainmentApproved,
+}: {
+  endpointId: string;
+  /** Fired the moment any destructive action is approved — lets the Command
+   * Center hero reflect "contained" without duplicating containment state. */
+  onContainmentApproved?: () => void;
+}) {
   const { getPlan, approveAction, isLoading } = useContainment();
   const [actions, setActions] = useState<ContainmentAction[] | null>(null);
   const [approvingId, setApprovingId] = useState<string | null>(null);
@@ -26,6 +34,7 @@ export function ContainmentPanel({ endpointId }: { endpointId: string }) {
     try {
       const updated = await approveAction(endpointId, actionId);
       setActions((prev) => prev?.map((a) => (a.id === updated.id ? updated : a)) ?? null);
+      if (updated.destructive) onContainmentApproved?.();
     } finally {
       setApprovingId(null);
     }

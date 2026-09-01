@@ -6,6 +6,7 @@ import { Text } from "@tremor/react";
 import { useLoadScenario, useRansomEyeState } from "@/entities/ransomeye";
 import type { ScenarioName } from "@/entities/ransomeye";
 import { ScenarioControls } from "@/entities/ransomeye/ui/ScenarioControls";
+import { CommandCenter } from "@/entities/ransomeye/ui/CommandCenter";
 import { AlertBanner } from "@/entities/ransomeye/ui/AlertBanner";
 import { EndpointFleetGrid } from "@/entities/ransomeye/ui/EndpointFleetGrid";
 import { RiskGauge } from "@/entities/ransomeye/ui/RiskGauge";
@@ -24,6 +25,7 @@ export function RansomwareClient() {
   const [tickIndex, setTickIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedEndpointId, setSelectedEndpointId] = useState<string | null>(null);
+  const [contained, setContained] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // A freshly-loaded run always restarts the story from tick 0, autoplaying,
@@ -33,6 +35,7 @@ export function RansomwareClient() {
     if (!run) return;
     setTickIndex(0);
     setIsPlaying(true);
+    setContained(false);
     setSelectedEndpointId(run.target_endpoint_id ?? run.endpoints[0]?.id ?? null);
   }, [run?.run_id]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -105,6 +108,17 @@ export function RansomwareClient() {
         </Text>
       )}
 
+      {run && (
+        <CommandCenter
+          endpoints={run.endpoints}
+          states={currentStates}
+          ticks={revealedTicks}
+          alert={activeAlerts[0]}
+          contained={contained}
+          targetEndpointId={run.target_endpoint_id}
+        />
+      )}
+
       {activeAlerts.map((alert) => (
         <AlertBanner key={alert.id} alert={alert} onInvestigate={() => setSelectedEndpointId(alert.endpoint_id)} />
       ))}
@@ -131,7 +145,10 @@ export function RansomwareClient() {
           {selectedEndpointId && (
             <div className="grid lg:grid-cols-3 gap-4 items-start">
               <ForecastPanel endpointId={selectedEndpointId} atTick={tickIndex} />
-              <ContainmentPanel endpointId={selectedEndpointId} />
+              <ContainmentPanel
+                endpointId={selectedEndpointId}
+                onContainmentApproved={() => setContained(true)}
+              />
               <CopilotPanel endpointId={selectedEndpointId} />
             </div>
           )}
