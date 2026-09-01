@@ -1,11 +1,11 @@
-import { HomeClient } from "./HomeClient";
+import { RansomwareClient } from "./ransomware/RansomwareClient";
 
 export const metadata = {
-  title: "RansomEye",
+  title: "RansomEye | Ransomware Early Warning",
   description:
-    "Alert correlation, deduplication and AI-driven incident analysis.",
+    "AI-powered real-time ransomware early warning: behavioral detection across file-system, process, privilege and network telemetry, explainable risk scoring, and approval-gated containment.",
 };
 
 export default function HomePage() {
-  return <HomeClient />;
+  return <RansomwareClient />;
 }

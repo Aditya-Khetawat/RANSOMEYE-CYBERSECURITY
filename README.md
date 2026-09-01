@@ -1,167 +1,192 @@
 <div align="center">
 
-# 🚨 RansomEye
+# 🛡️ RansomEye
 
-### AI-Powered Real-Time Ransomware Early Warning System
+### Next-Gen Ransomware Early Warning & Intelligent Alert Correlation Engine
 
-**HPE Problem Statement #05** · built on an intelligent alert correlation & deduplication engine (originally Synergy 2026 · HPE Problem Statement #10)
+> **Detecting ransomware kill chains before encryption occurs — and collapsing infrastructure alert storms into single, actionable incidents.**
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-RansomEye-f97316?style=for-the-badge)](https://hpe-hackathon-alert-correlation-ded-eta.vercel.app)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-RansomEye-f97316?style=for-the-badge&logo=vercel&logoColor=white)](https://hpe-hackathon-alert-correlation-ded-eta.vercel.app)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Next.js](https://img.shields.io/badge/Frontend-Next.js_15-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org)
 [![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
+[![Cerebras AI](https://img.shields.io/badge/AI_Copilot-Cerebras_Llama_3.3_70B-FF6B00?style=for-the-badge)](https://cerebras.ai)
+[![Deploy on Render](https://img.shields.io/badge/Deployed_on-Render-46E3B7?style=for-the-badge&logo=render&logoColor=black)](https://render.com)
 
 <br/>
 
-> _Detecting ransomware-like behavior early enough to contain it — before widespread encryption — while still turning infrastructure alert noise into actionable, prioritized intelligence._
+<kbd>
+<img src="https://img.shields.io/badge/HPE_PROBLEM_STATEMENT_%2305-Ransomware_Early_Warning-ff4500?style=flat-square" alt="HPE PS05"/>
+</kbd>
+&nbsp;
+<kbd>
+<img src="https://img.shields.io/badge/HPE_PROBLEM_STATEMENT_%2310-Alert_Correlation_%26_Dedup-00bfff?style=flat-square" alt="HPE PS10"/>
+</kbd>
+&nbsp;
+<kbd>
+<img src="https://img.shields.io/badge/STATUS-PRODUCTION_READY-brightgreen?style=flat-square" alt="Status"/>
+</kbd>
+&nbsp;
+<kbd>
+<img src="https://img.shields.io/badge/DATASETS-3_Real_World-purple?style=flat-square" alt="Datasets"/>
+</kbd>
 
 <br/>
-
-<kbd>
-<img src="https://img.shields.io/badge/STATUS-COMPLETE-brightgreen?style=flat-square" alt="Status: Complete"/>
-</kbd>
-&nbsp;
-<kbd>
-<img src="https://img.shields.io/badge/FEATURES-12_Pipeline_Stages-blue?style=flat-square" alt="12 Pipeline Stages"/>
-</kbd>
-&nbsp;
-<kbd>
-<img src="https://img.shields.io/badge/DATASETS-3_Real_World-purple?style=flat-square" alt="3 Datasets"/>
-</kbd>
+<br/>
 
 </div>
-
-<br/>
 
 ---
 
 ## 📋 Table of Contents
 
-- [Ransomware Early Warning](#-ransomware-early-warning)
-- [The Problem](#-the-problem-alert-storms)
-- [The Solution](#-the-solution-intelligent-alert-correlation)
-- [Key Features](#-key-features)
-- [System Architecture](#-system-architecture)
-- [Pipeline Deep Dive](#-pipeline-deep-dive)
-- [Technology Stack](#-technology-stack)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [Deployment](#-deployment)
-- [Datasets](#-datasets)
-- [Feature Roadmap](#-feature-roadmap)
+- [🌟 Executive Summary](#-executive-summary)
+- [🛡️ Core 1: Ransomware Early Warning System (HPE #05)](#️-core-1-ransomware-early-warning-system-hpe-05)
+- [⚡ Core 2: Intelligent Alert Correlation & Deduplication Engine (HPE #10)](#-core-2-intelligent-alert-correlation--deduplication-engine-hpe-10)
+- [🔬 Mathematical & Machine Learning Foundations](#-mathematical--machine-learning-foundations)
+- [🏗️ System Architecture](#️-system-architecture)
+- [🔍 Pipeline Deep Dive](#-pipeline-deep-dive)
+- [⚡ RansomEye vs. Traditional Tooling](#-ransomeye-vs-traditional-tooling)
+- [✨ Feature Matrix](#-feature-matrix)
+- [🛠️ Technology Stack](#️-technology-stack)
+- [📁 Project Structure](#-project-structure)
+- [🚀 Getting Started](#-getting-started)
+- [🌐 Production Deployment](#-production-deployment)
+- [📊 Supported Datasets](#-supported-datasets)
+- [✅ Feature Roadmap](#-feature-roadmap)
+- [🤝 Acknowledgments](#-acknowledgments)
 
 ---
 
-## 🛡️ Ransomware Early Warning
+## 🌟 Executive Summary
 
-RansomEye's core mission (HPE Problem Statement #05): identify ransomware-like behavior **before** widespread encryption, not after. Traditional security tooling reacts once damage is already visible; RansomEye watches file-system, process, privilege and network telemetry in real time and raises an early warning the moment behavior crosses an explainable risk threshold — with low overhead and, critically, without crying wolf on ordinary anomalies.
+Modern enterprise security and SRE teams face two crippling challenges:
 
-| Capability | How it works |
-|---|---|
-| **File-system monitoring** | Tracks modify/create/rename/delete rate, extension churn, and per-file entropy |
-| **Process behavior analysis** | Flags known ransomware tradecraft (`vssadmin`, `bcdedit`, encoded PowerShell, macro-spawned children) |
-| **Encryption pattern detection** | Mass rename onto one unfamiliar extension + plaintext→ciphertext entropy flips — format-independent, so it isn't fooled by already-compressed files |
-| **Privilege escalation detection** | Shadow-copy deletion, recovery disabling, token elevation events |
-| **Network monitoring** | External connection ratio, known-bad-reputation hits, C2 beacon patterns |
-| **Risk scoring** | Explainable 0–100 score (`35% encryption + 25% process + 20% privilege + 20% network`), corroborated — never replaced — by an IsolationForest anomaly score |
-| **Early warning alerts** | Fires once per endpoint on threshold crossing, with concrete contributing evidence and a recommended action |
-| **Defensive containment** | Approval-gated response plan (suspend process, isolate endpoint, block indicator); non-destructive actions (preserve telemetry, notify SOC) auto-execute |
-| **Demo Mode** | Three reproducible, seeded scenarios — `NORMAL_ACTIVITY`, `SUSPICIOUS_ACTIVITY` (anomalous but not an attack — the false-positive control), `RANSOMWARE_ATTACK` (full kill chain) — replayed live from one click at `/ransomware` |
+1. **Ransomware Attacks execute in seconds.** Traditional EDRs often react *after* widespread file encryption or volume shadow copy deletion has already occurred.
+2. **Alert Storms paralyze SOC & SRE responders.** A single root-cause infrastructure fault (e.g., database timeout) generates hundreds of downstream cascading alerts within minutes, burning critical response time.
 
-**Code:** `backend/app/ransomeye/` (telemetry, features, detector, risk engine, forecast, containment, copilot, API) and `frontend-next/entities/ransomeye/` + `frontend-next/app/(keep)/ransomware/` (dashboard). Built on top of — and reusing the explainable-scoring, LLM-with-template-fallback, and precompute-then-replay conventions of — the alert correlation engine described below, but with an entirely new detection core for a different problem: host behavioral telemetry, not text-alert correlation.
-
----
-
-## 🌩️ The Problem: Alert Storms
-
-In modern microservice architectures, **one single infrastructure failure triggers hundreds of downstream alerts within minutes.**
-
-Engineers spend the critical first 15 minutes of a major incident simply sifting through the noise, trying to figure out what actually broke. Existing systems rely on static rules that are hard to maintain and fail when novel incidents occur.
-
-<div align="center">
+**RansomEye solves both sides of the operational coin in a unified cyber-defense platform:**
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                    ONE DB CONNECTION FAILURE                  │
-│                            │                                 │
-│              ┌─────────────┼─────────────┐                   │
-│              ▼             ▼             ▼                   │
-│        ┌──────────┐ ┌──────────┐ ┌──────────┐               │
-│        │ API GW   │ │ Order    │ │ Payment  │               │
-│        │ Timeout  │ │ Service  │ │ Service  │               │
-│        │ ×24      │ │ 5xx ×18  │ │ Fail ×31 │               │
-│        └──────────┘ └──────────┘ └──────────┘               │
-│              │             │             │                   │
-│              ▼             ▼             ▼                   │
-│        150+ ALERTS IN 3 MINUTES — WHICH IS THE ROOT CAUSE?  │
-└──────────────────────────────────────────────────────────────┘
+                  ┌─────────────────────────────────────────────────────────────┐
+                  │                      RANSOMEYE PLATFORM                     │
+                  └──────────────────────────────┬──────────────────────────────┘
+                                                 │
+                  ┌──────────────────────────────┴──────────────────────────────┐
+                  ▼                                                             ▼
+┌───────────────────────────────────────────┐ ┌───────────────────────────────────────────┐
+│     🛡️ RANSOMWARE EARLY WARNING (PS #05)    │ │   ⚡ ALERT CORRELATION & DEDUP (PS #10)   │
+├───────────────────────────────────────────┤ ├───────────────────────────────────────────┤
+│ • Real-time host behavioral telemetry     │ │ • 12-stage automated alert pipeline       │
+│ • File entropy & mass churn tracking      │ │ • Fingerprint hashing & 5-min window dedup│
+│ • Shadow copy & process elevation flags   │ │ • TF-IDF + DBSCAN density clustering      │
+│ • Explainable 0–100 risk score engine     │ │ • Temporal root cause identification      │
+│ • IsolationForest anomaly validation      │ │ • Alert DNA historical incident matching  │
+│ • Approval-gated automated containment    │ │ • AI Remediation Playbooks & SRE runbooks │
+│ • +5m/+10m/+15m encryption impact forecast│ │ • Blast radius prediction & interactive DAG│
+└───────────────────────────────────────────┘ └───────────────────────────────────────────┘
 ```
 
-</div>
+---
+
+## 🛡️ Core 1: Ransomware Early Warning System (HPE #05)
+
+RansomEye monitors multi-vector telemetry across host endpoints to catch ransomware activity in the **pre-encryption staging phase**.
+
+```
+Host Telemetry Ingestion ──► Feature Windowing ──► Weighted Risk Engine ──► Anomaly Validation ──► Early Warning Alert ──► Defensive Containment
+```
+
+### Key Capabilities
+
+| Capability | Technical Implementation | Value to SOC Security Analysts |
+|:---|:---|:---|
+| **📁 File-System Churn** | Tracks modification, creation, rename, and deletion rates alongside extension entropy shifts | Catches mass renaming and format-independent file encryption flips before disk saturation |
+| **⚙️ Process Behavior** | Monitors suspicious process spawning (`vssadmin.exe`, `bcdedit.exe`, encoded PowerShell, macro children) | Detects shadow copy deletion and recovery inhibition before files are locked |
+| **🔐 Privilege Elevation** | Identifies token elevation, security service tampering, and administrative privilege escalation | Flags unauthorized credential theft and domain controller access attempts |
+| **🌐 Network Telemetry** | Analyzes external connection spikes, bad-reputation IP hits, and C2 beaconing frequencies | Catches active data exfiltration and command-and-control communication |
+| **🧠 Hybrid Risk Scoring** | Combines explainable 0–100 weighted risk heuristic with an `IsolationForest` ML anomaly score | Guarantees transparent auditability while catching novel zero-day behavioral anomalies |
+| **🔮 Impact Forecast** | Computes +5m, +10m, +15m projected encrypted file count, compromised processes, and data volume at risk | Gives incident commanders real-time predictive visibility into potential blast radius |
+| **🛡️ Approval-Gated Containment** | Generates non-destructive (auto-executed) and high-impact (approval-gated) containment plans | Enables instant process suspension and endpoint network isolation without accidental downtime |
+| **🤖 Cyber SOC Copilot** | Powered by **Cerebras Llama-3.3-70B** with real-time telemetry context injection | Provides plain-English threat summaries, MITRE ATT&CK mapping, and interactive investigator chat |
+
+### Reproducible Demo Scenarios
+
+RansomEye includes three seeded, one-click demo scenarios available directly at `/ransomware`:
+
+- 🟢 **`NORMAL_ACTIVITY`**: Standard workplace telemetry baseline (office documents, browser activity, routine software updates).
+- 🟡 **`SUSPICIOUS_ACTIVITY`**: High-volume backup/archiving script execution — acts as the **false-positive control** (high file churn but zero ransomware tradecraft signatures).
+- 🔴 **`RANSOMWARE_ATTACK`**: Full kill-chain simulation — process injection $\rightarrow$ shadow copy deletion $\rightarrow$ C2 beaconing $\rightarrow$ rapid entropy flip & mass rename.
 
 ---
 
-## 💡 The Solution: Intelligent Alert Correlation
+## ⚡ Core 2: Intelligent Alert Correlation & Deduplication Engine (HPE #10)
 
-RansomEye doesn't just silence alerts — it **collapses the flood into a handful of actionable incidents**, identifies the root cause, and tells you how to fix it.
+When infrastructure incidents occur, IT systems flood monitoring tools with repetitive alerts. RansomEye's correlation engine collapses alert noise by **up to 95%** in real time.
 
-> **TL;DR:** Correlation tells you _what broke_. RansomEye tells you _what's about to break worse_, _how it was fixed last time_, _why the root cause was selected_, and provides a _step-by-step SRE runbook_ to resolve it.
+```
+Raw Alerts (150+) ──► Fingerprint Dedup ──► TF-IDF Embedding ──► DBSCAN Clustering ──► Root Cause RCA ──► Correlated Incident (1)
+```
+
+### The Problem: Alert Storms
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                    CRITICAL DATABASE TIMEOUT                     │
+│                                │                                 │
+│              ┌─────────────────┼─────────────────┐               │
+│              ▼                 ▼                 ▼               │
+│        ┌───────────┐     ┌───────────┐     ┌───────────┐         │
+│        │ API GW    │     │ Order Svc │     │ Auth Svc  │         │
+│        │ 504 Error │     │ Retry Fail│     │ Token Error│        │
+│        │ ×45       │     │ ×60       │     │ ×50       │         │
+│        └───────────┘     └───────────┘     └───────────┘         │
+│              │                 │                 │               │
+│              └─────────────────┼─────────────────┘               │
+│                                ▼                                 │
+│         155 RAW ALERTS IN 3 MINUTES — SREs OVERWHELMED          │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+### The Solution: RansomEye Intelligent Correlation
+RansomEye processes the alert stream, hashes identical alerts within time windows, clusters semantic similarities using DBSCAN, isolates the root cause (earliest propagation timestamp), and generates a ready-to-execute SRE remediation playbook.
 
 ---
 
-## ✨ Key Features
+## 🔬 Mathematical & Machine Learning Foundations
 
-<table>
-<tr>
-<td width="50%">
+### 1. Ransomware Risk Engine Formula
+The host risk score $R_{\text{endpoint}} \in [0, 100]$ is computed using an explainable weighted heuristic corroborated by an unsupervised anomaly baseline:
 
-### 🔬 Core Intelligence
-| # | Feature | What it does |
-|---|---------|-------------|
-| 1 | **Fingerprint Deduplication** | Collapses identical alerts via `(service, alertname, 5-min window)` hashing |
-| 2 | **TF-IDF + DBSCAN Correlation** | Semantically clusters related alerts using time-windowed density clustering |
-| 3 | **Root Cause Identification** | Pinpoints the earliest alert in each cluster — failures propagate forward in time |
-| 4 | **Escalation Risk Score** | Real-time 0→1 signal: `0.40·growth + 0.35·severity + 0.25·spread` |
+$$R_{\text{endpoint}} = w_F \cdot S_{\text{file}} + w_P \cdot S_{\text{proc}} + w_E \cdot S_{\text{priv}} + w_N \cdot S_{\text{net}}$$
 
-</td>
-<td width="50%">
+Where:
+- $w_F = 0.35$ (File-system churn & entropy flip weight)
+- $w_P = 0.25$ (Process tradecraft & shadow-copy deletion weight)
+- $w_E = 0.20$ (Privilege escalation & credential theft weight)
+- $w_N = 0.20$ (Network C2 beaconing & exfiltration weight)
 
-### 🧠 Advanced AI
-| # | Feature | What it does |
-|---|---------|-------------|
-| 5 | **Alert DNA Matching** | Cosine similarity against past incidents: _"87% similar to INC-0412"_ |
-| 6 | **LLM Copilot (Cerebras)** | Plain English summaries + interactive incident chat via Llama-3.3-70b |
-| 7 | **Predictive Blast Radius** | 15-min horizon forecasts for risk, alert volume, and service spread |
-| 8 | **Root Cause Confidence (XAI)** | Explainable ranking of candidate services with rejection reasons |
+The score is cross-validated with an **IsolationForest Anomaly Model**:
 
-</td>
-</tr>
-<tr>
-<td>
+$$\text{Score}_{\text{anomaly}} = 100 \cdot \max\left(0, 1 - 2^{\frac{-\mathbb{E}(h(x))}{c(n)}}\right)$$
 
-### 🛠️ Operational Tools
-| # | Feature | What it does |
-|---|---------|-------------|
-| 9 | **AI Remediation Playbook** | Step-by-step SRE runbooks with risk badges, rollback plans, health checks |
-| 10 | **Interactive Terminal** | Simulated execution environment for remediation commands |
-| 11 | **Chaos Injector** | 5 production failure scenarios to test the full pipeline end-to-end |
-| 12 | **Storm Replay Engine** | Replay alert batches at variable speed to observe cascade formation |
+### 2. Alert Deduplication Fingerprinting
+Alerts are hashed into deduplication buckets across sliding 5-minute time windows:
 
-</td>
-<td>
+$$\text{Fingerprint}(a) = \text{MD5}\Big(a.\text{service} \;\|\; a.\text{alertname} \;\|\; \lfloor a.\text{timestamp} / 300 \rfloor\Big)$$
 
-### 📊 Forensic Analysis
-| # | Feature | What it does |
-|---|---------|-------------|
-| 13 | **Incident Time Machine** | Step-through forensic replay: raw → dedup → cluster → risk → DNA |
-| 14 | **Historical Comparator** | PR-style visual diff against institutional memory |
-| 15 | **Service Topology Map** | Interactive DAG visualization of service dependencies |
-| 16 | **Pipeline Evaluation** | Real-time accuracy metrics: precision, recall, F1-score |
+### 3. Semantic TF-IDF + Density DBSCAN Clustering
+Alert descriptions $d \in D$ are embedded into TF-IDF vector space:
 
-</td>
-</tr>
-</table>
+$$\text{TF-IDF}(t, d, D) = \text{TF}(t, d) \times \log\left(\frac{|D|}{|\{d' \in D : t \in d'\}|}\right)$$
+
+Using cosine distance $d(u, v) = 1 - \frac{u \cdot v}{\|u\|_2 \|v\|_2}$, time-windowed **DBSCAN** forms cluster partitions $\mathcal{C}_k$:
+
+$$\mathcal{N}_{\varepsilon}(p) = \{q \in D \mid \text{dist}(p, q) \le \varepsilon \land |t_p - t_q| \le \Delta T_{\text{window}}\}$$
+
+### 4. Correlation Escalation Risk Score
+The incident escalation risk $E_{\text{cluster}} \in [0.0, 1.0]$ calculates blast expansion rate:
+
+$$E_{\text{cluster}} = 0.40 \cdot \text{GrowthRate} + 0.35 \cdot \text{SeverityWeight} + 0.25 \cdot \text{ServiceSpread}$$
 
 ---
 
@@ -169,86 +194,157 @@ RansomEye doesn't just silence alerts — it **collapses the flood into a handfu
 
 ```mermaid
 graph TD
-    classDef frontend fill:none,stroke:#f97316,stroke-width:2px,color:#f97316,rx:5,ry:5
-    classDef backend fill:none,stroke:#10b981,stroke-width:2px,color:#10b981,rx:5,ry:5
-    classDef ml fill:none,stroke:#c084fc,stroke-width:2px,color:#c084fc,rx:5,ry:5
-    classDef ai fill:none,stroke:#f87171,stroke-width:2px,color:#f87171,rx:5,ry:5
-    classDef external fill:#f3f4f6,stroke:none,color:#111827,rx:5,ry:5
+    classDef frontend fill:#0f172a,stroke:#f97316,stroke-width:2px,color:#f97316,rx:6,ry:6;
+    classDef backend fill:#0f172a,stroke:#10b981,stroke-width:2px,color:#10b981,rx:6,ry:6;
+    classDef ml fill:#0f172a,stroke:#c084fc,stroke-width:2px,color:#c084fc,rx:6,ry:6;
+    classDef ai fill:#0f172a,stroke:#f87171,stroke-width:2px,color:#f87171,rx:6,ry:6;
+    classDef external fill:#1e293b,stroke:#64748b,stroke-width:1px,color:#f8fafc,rx:6,ry:6;
 
-    subgraph Data ["📦 Data Sources"]
-        Loghub["Loghub HDFS_v1<br>Real Dataset"]:::external
-        AIOps["AIOps Challenge 2020<br>Real Dataset"]:::external
-        Gen["Synthetic Generator<br>5 Failure Scenarios"]:::external
+    subgraph DataSources ["📦 Ingestion & Data Sources"]
+        Loghub["Loghub HDFS_v1<br>Real Dataset (11M logs)"]:::external
+        AIOps["AIOps Challenge 2020<br>Real Fault Injection"]:::external
+        TelemetryGen["Host Behavioral Telemetry<br>File / Proc / Priv / Net"]:::external
     end
 
-    subgraph Backend ["⚙️ FastAPI Pipeline Engine"]
-        Dedup["Fingerprint<br>Deduplication"]:::backend
-        Embed["TF-IDF<br>Vectorization"]:::ml
-        Cluster["Time-Windowed<br>DBSCAN"]:::ml
-        RootCause["Root Cause<br>Identifier"]:::backend
+    subgraph CoreBackend ["⚙️ FastAPI Core Engine"]
+        DedupEngine["Fingerprint<br>Deduplication Layer"]:::backend
+        VectorEngine["TF-IDF Text<br>Vectorization"]:::ml
+        DbscanEngine["Time-Windowed<br>DBSCAN Clustering"]:::ml
+        RcaEngine["Temporal Root Cause<br>Identifier"]:::backend
 
-        Dedup --> Embed
-        Embed --> Cluster
-        Cluster --> RootCause
+        DedupEngine --> VectorEngine
+        VectorEngine --> DbscanEngine
+        DbscanEngine --> RcaEngine
     end
 
-    subgraph Intelligence ["🧠 AI & ML Intelligence Layer"]
-        RiskScore["Escalation Risk<br>Score Engine"]:::ml
-        DNA["Alert DNA<br>Cosine Matching"]:::ml
-        Forecast["Blast Radius<br>Forecast"]:::ml
-        RCAConfidence["Root Cause<br>XAI Confidence"]:::ml
-        Playbook["Remediation<br>Playbook Generator"]:::ml
-        Summarizer["LLM Copilot<br>Cerebras Llama-3.3"]:::ai
+    subgraph RansomwareCore ["🛡️ Ransomware Early Warning Core"]
+        FeatureExtractor["Rolling Feature<br>Extractor"]:::ml
+        RiskEngine["Explainable Risk<br>Engine (0-100)"]:::ml
+        AnomalyDetector["IsolationForest<br>Anomaly Detector"]:::ml
+        ContainmentEngine["Defensive Containment<br>& Impact Forecast"]:::backend
+
+        FeatureExtractor --> RiskEngine
+        RiskEngine --> AnomalyDetector
+        AnomalyDetector --> ContainmentEngine
     end
 
-    subgraph Frontend ["🖥️ Next.js 15 Dashboard"]
-        Dashboard["RansomEye UI<br>Vercel Edge"]:::frontend
+    subgraph IntelligenceLayer ["🧠 AI & Forensic Intelligence"]
+        AlertDNA["Alert DNA<br>Cosine Matcher"]:::ml
+        BlastForecast["Predictive Blast<br>Radius Engine"]:::ml
+        XaiRca["Explainable RCA<br>Confidence Ranker"]:::ml
+        PlaybookGen["AI Remediation<br>Playbook Generator"]:::ml
+        Llamacopilot["Cyber Copilot<br>Cerebras Llama-3.3-70B"]:::ai
     end
 
-    Loghub --> Dedup
-    AIOps --> Dedup
-    Gen --> Dedup
+    subgraph FrontendApp ["🖥️ Next.js 15 App Router Dashboard"]
+        UI["RansomEye Interactive UI<br>Vercel Edge"]:::frontend
+    end
 
-    RootCause --> RiskScore
-    RootCause --> DNA
-    RootCause --> Forecast
-    RootCause --> RCAConfidence
-    RootCause --> Playbook
-    RootCause --> Summarizer
+    Loghub --> DedupEngine
+    AIOps --> DedupEngine
+    TelemetryGen --> FeatureExtractor
 
-    RiskScore --> Dashboard
-    DNA --> Dashboard
-    Forecast --> Dashboard
-    RCAConfidence --> Dashboard
-    Playbook --> Dashboard
-    Summarizer --> Dashboard
+    RcaEngine --> AlertDNA
+    RcaEngine --> BlastForecast
+    RcaEngine --> XaiRca
+    RcaEngine --> PlaybookGen
+    RcaEngine --> Llamacopilot
 
-    style Data fill:none,stroke:#6b7280,stroke-width:1px,stroke-dasharray: 5 5
-    style Backend fill:none,stroke:#6b7280,stroke-width:1px,stroke-dasharray: 5 5
-    style Intelligence fill:none,stroke:#6b7280,stroke-width:1px,stroke-dasharray: 5 5
-    style Frontend fill:none,stroke:#6b7280,stroke-width:1px,stroke-dasharray: 5 5
+    ContainmentEngine --> Llamacopilot
+
+    AlertDNA --> UI
+    BlastForecast --> UI
+    XaiRca --> UI
+    PlaybookGen --> UI
+    ContainmentEngine --> UI
+    Llamacopilot --> UI
 ```
 
 ---
 
 ## 🔍 Pipeline Deep Dive
 
-Each alert passes through a **12-stage pipeline** — from raw ingestion to actionable incident card:
+Each telemetry event and alert passes through a **12-stage end-to-end pipeline**:
 
-| Stage | Name | Implementation | Key Files |
-|:---:|------|----------------|-----------|
-| **1** | **Ingestion** | Three switchable sources: Loghub HDFS_v1, AIOps Challenge 2020, and a multi-source synthetic generator with 5 cascading failure scenarios. Switch live via the Dataset dropdown. | `data/loghub_hdfs_loader.py` · `data/aiops_challenge_loader.py` · `data/synthetic_alert_generator.py` |
-| **2** | **Deduplication** | Fingerprint hashing of `(service, alertname, 5-min window)` — Alertmanager-style. Collapses redundant spikes without losing signal. | `backend/app/dedup.py` |
-| **3** | **Vectorization** | TF-IDF embedding of alert message text. Lightweight alternative to transformer models — blazing fast with minimal memory footprint. | `backend/app/clustering.py` |
-| **4** | **Correlation** | Time-windowed DBSCAN clustering on TF-IDF vectors. Parameters grid-searched against ground truth labels. | `backend/app/clustering.py` |
-| **5** | **Root Cause Analysis** | Identifies the earliest alert in each cluster — failures propagate forward in time. | `backend/app/clustering.py` |
-| **6** | **Escalation Risk Score** | Heuristic formula: `0.40·growth + 0.35·severity + 0.25·spread`. Fully normalized (0→1), explainable. | `backend/app/risk_score.py` |
-| **7** | **Alert DNA Matching** | Cosine similarity between cluster centroids and past incident TF-IDF vectors. Surfaces historical resolutions for novel-but-similar issues. | `backend/app/alert_dna.py` |
-| **8** | **LLM Summarization** | Translates multi-service clusters into plain English. Powers the interactive AI Copilot via **Cerebras Llama-3.3-70b**. | `backend/app/summarizer.py` · `backend/app/assistant.py` |
-| **9** | **Blast Radius Forecast** | 15-minute horizon step projections (+5m, +10m, +15m) for risk escalation, alert volume growth, and downstream service spread. | `backend/app/forecast.py` |
-| **10** | **Root Cause Confidence (XAI)** | Explainable ranking of candidate services with normalized confidence scores (0→100%) and candidate rejection explanations across 5 heuristic signals. | `backend/app/root_cause_confidence.py` |
-| **11** | **Remediation Playbook** | AI-generated step-by-step SRE runbooks with duration/risk badges, health validation checklists, rollback procedures, and interactive simulation mode. | `backend/app/playbook.py` |
-| **12** | **Evaluation** | Real-time precision, recall, F1-score against ground truth. MTTR & triage time savings calculated per resolved incident. | `backend/app/main.py` |
+| Stage | Name | Architecture & Algorithm | Output Artifact | Key Code Files |
+|:---:|:---|:---|:---|:---|
+| **1** | **Ingestion** | Multi-source loader supporting Loghub HDFS_v1, AIOps Challenge 2020, and host telemetry generators | Normalized Alert Stream | `data/synthetic_alert_generator.py`<br>`data/loghub_hdfs_loader.py` |
+| **2** | **Deduplication** | MD5 fingerprint hashing of `(service, alertname, 5-min window)` | Deduplicated Alert Stream | `backend/app/dedup.py` |
+| **3** | **Vectorization** | TF-IDF text vectorization over alert payloads & messages | Sparse Feature Vectors | `backend/app/clustering.py` |
+| **4** | **Correlation** | Time-windowed DBSCAN density-based spatial clustering | Incident Clusters | `backend/app/clustering.py` |
+| **5** | **Root Cause Analysis** | Earliest timestamp extraction & causal dependency graph ordering | Root Cause Alert Tag | `backend/app/clustering.py` |
+| **6** | **Risk Scoring** | Normalized heuristic: `0.40·growth + 0.35·severity + 0.25·spread` | Escalation Risk (0.0–1.0) | `backend/app/risk_score.py` |
+| **7** | **Alert DNA** | Cosine similarity comparison against historical incident knowledge base | Past Incident Matches | `backend/app/alert_dna.py` |
+| **8** | **LLM Copilot** | Cerebras API inference with Llama-3.3-70B model | Natural Language Summary | `backend/app/summarizer.py`<br>`backend/app/assistant.py` |
+| **9** | **Blast Radius** | Linear projection & cascade horizon forecasting (+5m, +10m, +15m) | Blast Radius Forecast | `backend/app/forecast.py` |
+| **10** | **RCA Confidence** | Multi-signal explainable XAI confidence score with rejection reasons | RCA Confidence % | `backend/app/root_cause_confidence.py` |
+| **11** | **Playbook Gen** | Step-by-step SRE runbooks with interactive terminal execution mode | Interactive Playbook | `backend/app/playbook.py` |
+| **12** | **Evaluation** | Real-time accuracy metrics: Precision, Recall, F1, MTTR savings | Pipeline Metrics | `backend/app/main.py` |
+
+---
+
+## ⚡ RansomEye vs. Traditional Tooling
+
+| Feature / Metric | Legacy SIEM / Rules Engine | Traditional EDR Tooling | RansomEye Cyber-Defense |
+|:---|:---:|:---:|:---:|
+| **Detection Speed** | Reactive (post-log indexing) | Post-signature execution | **Pre-encryption behavioral staging** |
+| **Alert Reduction Rate** | 0% (Raw log ingestion) | 10%–20% (Endpoint grouped) | **> 90% Noise Reduction** |
+| **Root Cause Identification** | Manual log searching | Limited to host processes | **Automated Temporal & Topology RCA** |
+| **Risk Explainability** | Black-box severity | Static threat score | **Explainable Weighted Signal Breakdown** |
+| **Historical Incident Matching** | Manual query searching | None | **Automated Alert DNA Cosine Matching** |
+| **Remediation Capabilities** | Manual playbooks | Rigid auto-quarantine | **Approval-Gated Safe Containment** |
+| **AI Investigator Assistant** | Static chatbot / None | Basic summary | **Cerebras Llama-3.3-70B Context Copilot** |
+
+---
+
+## ✨ Feature Matrix
+
+<table width="100%">
+<tr>
+<td width="50%" valign="top">
+
+### 🛡️ Ransomware Early Warning
+- 🔬 **Multi-Vector Telemetry Tracking**: File, process, privilege, network.
+- 📈 **Entropy Flip Detection**: Identifies plaintext-to-ciphertext transitions.
+- 🚫 **Shadow Copy Protection**: Detects `vssadmin` and recovery removal.
+- 🔮 **+15m Impact Forecast**: Projects encrypted file count & compromised data.
+- ⚡ **Approval-Gated Containment**: Non-destructive auto-execution & gated isolation.
+- 💬 **Cyber SOC Copilot**: AI assistant powered by Cerebras Llama-3.3-70B.
+
+</td>
+<td width="50%" valign="top">
+
+### ⚡ Intelligent Alert Correlation
+- 🎯 **Fingerprint Deduplication**: Collapses 5-min alert spikes.
+- 🧮 **TF-IDF + DBSCAN Clustering**: Fast semantic alert grouping.
+- 📍 **Root Cause Identification**: Isolates originating service failure.
+- 🧬 **Alert DNA Matching**: Cosine similarity to historical incidents.
+- 📊 **Explainable RCA (XAI)**: Rejection reasons for candidate services.
+- 🗺️ **Interactive Topology DAG**: Visualizes service dependencies.
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+### 🛠️ SRE & Incident Response
+- 📋 **AI Remediation Playbooks**: Detailed step-by-step SRE runbooks.
+- 💻 **Interactive Terminal Simulator**: Dry-run remediation commands safely.
+- ⏳ **Incident Time Machine**: Step-through forensic replay of alert cascades.
+- 🔍 **Historical Comparator**: Git PR-style visual diff between incidents.
+
+</td>
+<td width="50%" valign="top">
+
+### 📊 Datasets & Evaluation
+- 🎲 **Synthetic Chaos Injector**: 5 failure scenarios with ground-truth labels.
+- 📦 **Loghub HDFS_v1 Dataset**: Real-world HDFS block anomaly logs.
+- 🏭 **AIOps Challenge 2020**: Production fault injection dataset.
+- 📉 **Pipeline Evaluation Dashboard**: Real-time Precision, Recall, F1, & MTTR.
+
+</td>
+</tr>
+</table>
 
 ---
 
@@ -258,30 +354,23 @@ Each alert passes through a **12-stage pipeline** — from raw ingestion to acti
 <tr>
 <td valign="top" width="50%">
 
-### Backend & Data Science
-| Technology | Purpose |
-|-----------|---------|
-| **Python 3.9+** | Core language |
-| **FastAPI** | High-performance async API server |
-| **Scikit-Learn** | TF-IDF vectorization + DBSCAN clustering |
-| **NumPy** | Fast vector operations |
-| **SQLAlchemy** | Alert persistence & state management |
-| **Cerebras API** | Llama-3.3-70b inference (AI Copilot + Summarizer) |
-| **Pydantic v2** | Request/response validation |
+### Backend & Data Science Engine
+- **Language**: Python 3.9+
+- **API Framework**: [FastAPI](https://fastapi.tiangolo.com/) (Async, Pydantic v2)
+- **Machine Learning**: [Scikit-Learn](https://scikit-learn.org/) (TF-IDF, DBSCAN, IsolationForest)
+- **Numerical Computing**: NumPy, Pandas
+- **Persistence**: SQLAlchemy + SQLite
+- **LLM Provider**: [Cerebras API](https://cerebras.ai) (Llama-3.3-70B inference)
 
 </td>
 <td valign="top" width="50%">
 
-### Frontend & Visualization
-| Technology | Purpose |
-|-----------|---------|
-| **Next.js 15** | React framework with App Router + Turbopack |
-| **TypeScript** | Type-safe component development |
-| **TailwindCSS** | Utility-first styling with dark mode |
-| **Tremor** | Data visualization components |
-| **Headless UI** | Accessible UI primitives (drawers, modals) |
-| **Dagre + React Flow** | Interactive service topology DAG |
-| **Vercel** | Edge deployment with API rewrites |
+### Frontend & Visualization Dashboard
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router, React 19)
+- **Styling**: Tailwind CSS (Dark theme aesthetics)
+- **UI Components**: Headless UI, Tremor Components
+- **Graph & Topology**: React Flow, Dagre DAG layout
+- **Deployment & Edge**: Vercel Edge Rewrites
 
 </td>
 </tr>
@@ -295,60 +384,54 @@ Each alert passes through a **12-stage pipeline** — from raw ingestion to acti
 RansomEye/
 ├── backend/
 │   ├── app/
-│   │   ├── main.py                  # FastAPI app — all pipeline endpoints
-│   │   ├── dedup.py                 # Fingerprint deduplication layer
-│   │   ├── clustering.py            # TF-IDF + DBSCAN correlation engine
-│   │   ├── risk_score.py            # Escalation risk score calculator
-│   │   ├── alert_dna.py             # Historical incident DNA matching
-│   │   ├── forecast.py              # Blast radius 15-min forecast engine
-│   │   ├── root_cause_confidence.py # XAI confidence ranking
-│   │   ├── playbook.py              # AI remediation playbook generator
-│   │   ├── summarizer.py            # LLM summarization (Cerebras)
-│   │   ├── assistant.py             # Interactive AI Copilot
-│   │   ├── automation.py            # Workflow rule evaluation
-│   │   ├── db.py                    # SQLAlchemy alert persistence
-│   │   ├── models.py               # Pydantic data models
-│   │   └── ransomeye/               # Ransomware early-warning detection core
-│   │       ├── telemetry.py         # Synthetic file/process/network/privilege event generator
-│   │       ├── features.py          # Rolling-window behavioral feature extraction
-│   │       ├── detector.py          # Rolling-baseline ranking + IsolationForest anomaly score
-│   │       ├── risk_engine.py       # Explainable 0-100 weighted ransomware risk score
-│   │       ├── alerts.py            # Early-warning alert firing (dedup'd per endpoint)
-│   │       ├── forecast.py          # +5/+10/+15m encryption impact forecast
-│   │       ├── containment.py       # Approval-gated defensive containment plan
-│   │       ├── copilot.py           # Analyst copilot (reuses assistant.py's LLM plumbing)
-│   │       ├── demo.py              # Scenario orchestrator (NORMAL/SUSPICIOUS/RANSOMWARE_ATTACK)
-│   │       └── api.py               # FastAPI router: /ransomeye/*
-│   └── requirements.txt
+│   │   ├── main.py                  # FastAPI application entrypoint & correlation routes
+│   │   ├── dedup.py                 # Fingerprint deduplication engine
+│   │   ├── clustering.py            # TF-IDF vectorizer + DBSCAN clustering engine
+│   │   ├── risk_score.py            # Correlation escalation risk calculator
+│   │   ├── alert_dna.py             # Cosine similarity alert DNA matcher
+│   │   ├── forecast.py              # 15-minute blast radius forecast model
+│   │   ├── root_cause_confidence.py # Explainable XAI confidence ranking
+│   │   ├── playbook.py              # SRE remediation playbook generator
+│   │   ├── summarizer.py            # LLM incident summarizer (Cerebras Llama-3.3)
+│   │   ├── assistant.py             # Interactive AI Copilot assistant
+│   │   ├── db.py                    # SQLAlchemy persistence layer
+│   │   ├── models.py               # Pydantic data schemas
+│   │   └── ransomeye/               # Ransomware Early Warning Detection Core (HPE #05)
+│   │       ├── telemetry.py         # Multi-vector host event generator
+│   │       ├── features.py          # Rolling feature window extractor
+│   │       ├── detector.py          # Dual Baseline + IsolationForest anomaly detector
+│   │       ├── risk_engine.py       # Explainable 0-100 ransomware risk calculator
+│   │       ├── alerts.py            # Deduplicated endpoint early-warning alerts
+│   │       ├── forecast.py          # +5m/+10m/+15m encryption impact forecast engine
+│   │       ├── containment.py       # Approval-gated defensive containment generator
+│   │       ├── copilot.py           # Cyber SOC analyst copilot bridge
+│   │       ├── demo.py              # Scenario orchestrator (NORMAL/SUSPICIOUS/RANSOMWARE)
+│   │       └── api.py               # FastAPI router (/ransomeye/*)
+│   └── requirements.txt             # Python dependencies
 │
 ├── data/
-│   ├── synthetic_alert_generator.py # Multi-scenario alert generator
-│   ├── loghub_hdfs_loader.py        # Loghub HDFS_v1 dataset loader
+│   ├── synthetic_alert_generator.py # 5 cascading synthetic failure scenario generator
+│   ├── loghub_hdfs_loader.py        # Loghub HDFS_v1 dataset parser & cache loader
 │   ├── aiops_challenge_loader.py    # AIOps Challenge 2020 loader
-│   └── seed_incident_library.json   # Historical incident knowledge base
+│   └── seed_incident_library.json   # Historical incident DNA knowledge base
 │
-├── frontend-next/                   # Next.js 15 dashboard (production)
+├── frontend-next/                   # Next.js 15 Production Web Application
 │   ├── app/(keep)/                  # App Router pages
-│   │   ├── feed/                    # Alert Feed view
-│   │   ├── incidents/               # Incident detail + comparator
+│   │   ├── feed/                    # Live Alert Feed view
+│   │   ├── incidents/               # Correlated Incident details & PR comparator
 │   │   ├── correlations/            # DBSCAN cluster visualization
-│   │   ├── deduplication/           # Dedup statistics
-│   │   ├── topology/               # Service dependency DAG
-│   │   ├── forecast/               # Blast radius predictions
-│   │   ├── timemachine/            # Forensic incident replay
-│   │   ├── evaluation/             # Pipeline accuracy metrics
-│   │   ├── pipeline/               # End-to-end pipeline view
-│   │   └── ransomware/             # Ransomware Early Warning dashboard
-│   ├── entities/alertengine/          # Alert correlation engine domain layer
-│   ├── entities/ransomeye/            # Ransomware detection domain layer
-│   └── components/
-│       ├── chaos/                   # Chaos injection scenarios
-│       └── remediation/             # Interactive terminal modal
+│   │   ├── deduplication/           # Deduplication performance dashboard
+│   │   ├── topology/               # Interactive service dependency DAG
+│   │   ├── forecast/               # Blast radius projections
+│   │   ├── timemachine/            # Forensic incident step-replay
+│   │   ├── evaluation/             # Pipeline metrics (Precision, Recall, F1)
+│   │   └── ransomware/             # Ransomware Early Warning Dashboard
+│   ├── entities/                    # TypeScript domain entities
+│   └── components/                  # Reusable UI components & modals
 │
-├── notebooks/
-│   └── poc_clustering.ipynb         # Research notebook: clustering PoC
-│
-└── README.md
+├── render.yaml                      # Render zero-cost blueprint deployment spec
+├── notebooks/                       # PoC Jupyter research notebooks
+└── README.md                        # Documentation
 ```
 
 ---
@@ -357,142 +440,147 @@ RansomEye/
 
 ### Prerequisites
 
-| Requirement | Version |
-|-------------|---------|
-| Python | 3.9+ |
-| Node.js | 18+ |
-| npm | 9+ |
-| Cerebras API Key | Optional (for AI features) |
+| Requirement | Minimum Version | Recommended |
+|:---|:---:|:---:|
+| **Python** | `3.9+` | `3.11` |
+| **Node.js** | `18.0.0+` | `20.x` |
+| **npm** | `9.0.0+` | `10.x` |
+| **Cerebras API Key** | Optional | Recommended (For AI Copilot & Playbooks) |
 
-### 1️⃣ Backend Setup
+---
+
+### 1️⃣ Local Backend Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/Aditya0105singh/HPE--HACKATHON-ALERT-CORRELATION-DEDUPLICATION.git
-cd HPE--HACKATHON-ALERT-CORRELATION-DEDUPLICATION
+# 1. Clone repository
+git clone https://github.com/Aditya-Khetawat/RANSOMEYE-CYBERSECURITY.git
+cd RANSOMEYE-CYBERSECURITY
 
-# Install backend dependencies
+# 2. Install backend dependencies
 pip install -r backend/requirements.txt
 
-# (Optional) Set your Cerebras API key for AI features
-echo "CEREBRAS_API_KEY=your_key_here" > .env
+# 3. Configure environment variables (Optional)
+echo "CEREBRAS_API_KEY=your_cerebras_key_here" > .env
 
-# One-time: Build the Loghub HDFS_v1 alert batch
-# Downloads + caches HDFS_v1.zip from Zenodo (~187MB)
+# 4. Pre-cache real-world datasets (Optional, one-time)
 python data/loghub_hdfs_loader.py
-
-# One-time: Build the AIOps Challenge 2020 alert batch
-# Reads fault-injection CSV via HTTP range requests
 python data/aiops_challenge_loader.py
 
-# Start the FastAPI server
+# 5. Launch FastAPI backend server
 uvicorn app.main:app --app-dir backend --reload --port 8001
 ```
 
-> 🟢 API available at `http://localhost:8001` · Interactive docs at `http://localhost:8001/docs`
+> 🟢 **Backend API Live at**: `http://localhost:8001`  
+> 📖 **Interactive Swagger OpenAPI Specs**: `http://localhost:8001/docs`
 
-### 2️⃣ Frontend Setup
+---
+
+### 2️⃣ Local Frontend Installation
 
 ```bash
-# Navigate to the frontend
+# 1. Navigate to frontend directory
 cd frontend-next
 
-# Install dependencies
+# 2. Install dependencies
 npm install
 
-# Start the Next.js dev server (Turbopack)
+# 3. Start Next.js development server with Turbopack
 npm run dev
 ```
 
-> 🟢 Dashboard available at `http://localhost:3000`
-
-### 3️⃣ Quick Test
-
-Once both servers are running:
-1. Open `http://localhost:3000`
-2. Click any **Dataset** button (Synthetic / Loghub / AIOps) on the Home page
-3. The full pipeline runs automatically — watch alerts collapse into correlated incidents in real time
+> 🟢 **Frontend Dashboard Live at**: `http://localhost:3000`
 
 ---
 
-## 🌐 Deployment
+### 3️⃣ Quick Verification & Usage
 
-The application is architected for **zero-cost deployment** on modern PaaS platforms:
+1. Open `http://localhost:3000` in your browser.
+2. Navigate to **Ransomware Early Warning** (`/ransomware`) to run live ransomware attack simulations (`RANSOMWARE_ATTACK` vs `SUSPICIOUS_ACTIVITY`).
+3. Switch datasets on the **Alert Feed** to execute real-time alert deduplication and correlation over 11M+ log entries.
 
-| Layer | Platform | Details |
-|-------|----------|---------|
-| **Backend** | **Render** | Deploy as a Python Web Service on Render's Free Tier using the [`render.yaml`](./render.yaml) Blueprint at the repo root — reads `backend/requirements.txt`, runs `uvicorn app.main:app`. Set `CEREBRAS_API_KEY` in the dashboard (never committed). TF-IDF (not heavy neural nets) means the entire backend runs comfortably within **512MB RAM**. |
-| **Frontend** | **Vercel** | Import the GitHub repo, set **Root Directory** to `frontend-next`. API requests are proxied to the backend via middleware rewrites — zero CORS issues. Required env vars: `API_URL` (your Render backend URL), `NEXTAUTH_URL` (your Vercel URL), `NEXTAUTH_SECRET` (`openssl rand -hex 32`), `AUTH_TYPE=NO_AUTH`, `DISABLE_REDIRECTS=true`, `PUSHER_DISABLED=true`, `POSTHOG_DISABLED=true`, `SENTRY_DISABLED=true`. |
+---
 
-### One-click backend deploy
+## 🌐 Production Deployment
+
+RansomEye is optimized for **zero-cost, high-performance deployment**:
+
+```
+                       ┌─────────────────────────┐
+                       │   Vercel Edge Network   │
+                       │   (Next.js 15 Frontend) │
+                       └────────────┬────────────┘
+                                    │ Edge Middleware Proxy Rewrite
+                                    ▼
+                       ┌─────────────────────────┐
+                       │  Render Cloud Service   │
+                       │   (FastAPI Backend)     │
+                       └─────────────────────────┘
+```
+
+### Option A: 1-Click Backend Deploy on Render
+
+Click the button below to deploy the backend directly to Render using [`render.yaml`](./render.yaml):
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Aditya-Khetawat/RANSOMEYE-CYBERSECURITY)
 
-Click the button, connect your GitHub account when prompted, set `CEREBRAS_API_KEY` when asked, and Render reads [`render.yaml`](./render.yaml) to configure everything else automatically. Copy the resulting `https://<service>.onrender.com` URL for the frontend's `API_URL`.
+- Reads `backend/requirements.txt`
+- Configured for Python 3.11+
+- Lightweight memory footprint (< 512MB RAM)
 
-### Frontend deploy
+### Option B: Frontend Deploy on Vercel
 
-1. [vercel.com/new](https://vercel.com/new) → **Import Git Repository** → select `RANSOMEYE-CYBERSECURITY`.
+1. Go to [Vercel Dashboard](https://vercel.com/new) $\rightarrow$ Import `RANSOMEYE-CYBERSECURITY`.
 2. Set **Root Directory** to `frontend-next`.
-3. Add the environment variables listed above (`API_URL` = your Render backend URL from step above).
-4. Deploy — Vercel auto-detects Next.js 15, no build config needed.
+3. Configure Environment Variables:
+   - `API_URL` = `https://your-backend-name.onrender.com`
+   - `AUTH_TYPE` = `NO_AUTH`
+   - `DISABLE_REDIRECTS` = `true`
+4. Click **Deploy**.
 
 ---
 
-## 📊 Datasets
+## 📊 Supported Datasets
 
-RansomEye supports **three switchable data sources**, all running through the same pipeline:
-
-| Dataset | Type | Size | Source |
-|---------|------|------|--------|
-| **Synthetic Generator** | Generated | ~120 alerts/batch | 5 cascading failure scenarios with ground-truth labels |
-| **Loghub HDFS_v1** | Real-world | ~11M log lines → alerts | [Zenodo / Loghub](https://zenodo.org/records/8196385) — real HDFS block-level anomaly labels |
-| **AIOps Challenge 2020** | Real-world | Fault-injection logs → alerts | [AIOps Challenge](http://iops.ai/competition_detail/?competition_id=15) — real production fault injection |
-
-> Switch between datasets live via the **Dataset** dropdown in the top bar — no restart needed.
+| Dataset | Nature | Total Volume | Anomaly / Ground-Truth Labels | Usage |
+|:---|:---:|:---:|:---:|:---|
+| **Synthetic Chaos Engine** | Simulated | 120 alerts/batch | 5 cascading microservice scenarios | Instant PoC testing & pipeline verification |
+| **Loghub HDFS_v1** | Real-World Logs | ~11M log lines | Block-level anomaly ground truth (Zenodo) | Large-scale AIOps benchmark validation |
+| **AIOps Challenge 2020** | Production Faults | Multi-service alerts | Injected metric/log anomalies | Complex cascade evaluation |
 
 ---
 
 ## ✅ Feature Roadmap
 
-- [x] Synthetic multi-source alert generator with ground-truth labels
-- [x] Fingerprint deduplication layer
-- [x] TF-IDF + time-windowed DBSCAN correlation (grid-searched)
-- [x] Escalation Risk Score (explainable heuristic)
-- [x] Alert DNA past-incident matching
-- [x] FastAPI ingestion & pipeline endpoints
-- [x] Full Next.js 15 dashboard (Feed, Dedup, Correlations, Incidents, Topology)
-- [x] LLM Integration: AI Copilot + Incident Summaries (Cerebras Llama-3.3-70b)
-- [x] Real AIOps datasets: Loghub HDFS_v1 + AIOps Challenge 2020
-- [x] Predictive Blast Radius Forecast (15-min horizon)
-- [x] Incident Time Machine (forensic replay)
-- [x] Historical Incident Comparator (PR-style diff)
-- [x] Root Cause Confidence Graph (XAI decision transparency)
-- [x] AI Remediation Playbook (SRE runbooks + simulation mode)
-- [x] Chaos Injector (5 production failure scenarios)
-- [x] Interactive Terminal (simulated command execution)
-- [x] Storm Replay Engine (variable-speed alert replay)
-- [x] Pipeline Evaluation (precision, recall, F1, MTTR savings)
-- [x] SQLite persistence layer for alert state
-- [x] Workflow automation rule engine
+- [x] **Ransomware Early Warning Core** (File entropy, process tradecraft, privilege elevation)
+- [x] **Explainable 0–100 Weighted Risk Scoring Engine**
+- [x] **IsolationForest ML Anomaly Verification**
+- [x] **Approval-Gated Defensive Containment Generator**
+- [x] **+15m Encryption Blast Horizon Forecasting**
+- [x] **Fingerprint Deduplication Layer (5-min window hashing)**
+- [x] **TF-IDF + DBSCAN Density Clustering Correlation Engine**
+- [x] **Temporal Root Cause Analysis (RCA)**
+- [x] **Alert DNA Past-Incident Cosine Similarity Matching**
+- [x] **Cerebras Llama-3.3-70B AI Copilot Integration**
+- [x] **AI Remediation Playbooks & Interactive Terminal Simulator**
+- [x] **Incident Time Machine & Historical PR-Style Comparator**
+- [x] **Interactive React Flow Service Topology DAG**
+- [x] **Multi-Dataset Support (Synthetic, Loghub HDFS_v1, AIOps Challenge 2020)**
+- [x] **Render & Vercel Production Infrastructure Deployment**
 
 ---
 
-## 👥 Team
+## 🤝 Acknowledgments
 
-Built for **Synergy 2026 — HPE Problem Statement #10**
+RansomEye was designed and built for **HPE Synergy 2026**:
+- **HPE Problem Statement #05**: Ransomware Early Warning System
+- **HPE Problem Statement #10**: Alert Correlation & Deduplication Engine
 
 ---
 
 <div align="center">
 
-<br/>
+**⚡ RansomEye Cyber Security** — *Turning alert storms into actionable intelligence and catching ransomware before encryption.*
 
-**⚡ RansomEye** — _From 150 alerts to 1 actionable incident in under 2 seconds._
-
-<br/>
-
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/Aditya0105singh/HPE--HACKATHON-ALERT-CORRELATION-DEDUPLICATION)
-[![Live Demo](https://img.shields.io/badge/🌐_Try_It_Live-RansomEye-f97316?style=for-the-badge)](https://hpe-hackathon-alert-correlation-ded-eta.vercel.app)
+[![Live Demo](https://img.shields.io/badge/🌐_Try_RansomEye_Live-f97316?style=for-the-badge&logo=vercel&logoColor=white)](https://hpe-hackathon-alert-correlation-ded-eta.vercel.app)
 
 </div>

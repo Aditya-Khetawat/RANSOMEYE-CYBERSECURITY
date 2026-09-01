@@ -1,9 +1,7 @@
-import { RansomwareClient } from "./RansomwareClient";
+import { redirect } from "next/navigation";
 
-export const metadata = {
-  title: "RansomEye | Ransomware Early Warning",
-};
-
+// RansomEye's ransomware dashboard is the product's home page now — this
+// route stays only as a redirect for anyone with the old /ransomware link.
 export default function RansomwarePage() {
-  return <RansomwareClient />;
+  redirect("/");
 }
