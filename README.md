@@ -16,11 +16,11 @@
 <br/>
 
 <kbd>
-<img src="https://img.shields.io/badge/HPE_PROBLEM_STATEMENT_%2305-Ransomware_Early_Warning-ff4500?style=flat-square" alt="HPE PS05"/>
+<img src="https://img.shields.io/badge/MODULE-Ransomware_Early_Warning-ff4500?style=flat-square" alt="Ransomware Early Warning"/>
 </kbd>
 &nbsp;
 <kbd>
-<img src="https://img.shields.io/badge/HPE_PROBLEM_STATEMENT_%2310-Alert_Correlation_%26_Dedup-00bfff?style=flat-square" alt="HPE PS10"/>
+<img src="https://img.shields.io/badge/ENGINE-Alert_Correlation_%26_Dedup-00bfff?style=flat-square" alt="Alert Correlation & Dedup"/>
 </kbd>
 &nbsp;
 <kbd>
@@ -41,8 +41,8 @@
 ## 📋 Table of Contents
 
 - [🌟 Executive Summary](#-executive-summary)
-- [🛡️ Core 1: Ransomware Early Warning System (HPE #05)](#️-core-1-ransomware-early-warning-system-hpe-05)
-- [⚡ Core 2: Intelligent Alert Correlation & Deduplication Engine (HPE #10)](#-core-2-intelligent-alert-correlation--deduplication-engine-hpe-10)
+- [🛡️ Core 1: Ransomware Early Warning System](#️-core-1-ransomware-early-warning-system)
+- [⚡ Core 2: Intelligent Alert Correlation & Deduplication Engine](#-core-2-intelligent-alert-correlation--deduplication-engine)
 - [🔬 Mathematical & Machine Learning Foundations](#-mathematical--machine-learning-foundations)
 - [🏗️ System Architecture](#️-system-architecture)
 - [🔍 Pipeline Deep Dive](#-pipeline-deep-dive)
@@ -75,7 +75,7 @@ Modern enterprise security and SRE teams face two crippling challenges:
                   ┌──────────────────────────────┴──────────────────────────────┐
                   ▼                                                             ▼
 ┌───────────────────────────────────────────┐ ┌───────────────────────────────────────────┐
-│     🛡️ RANSOMWARE EARLY WARNING (PS #05)    │ │   ⚡ ALERT CORRELATION & DEDUP (PS #10)   │
+│     🛡️ RANSOMWARE EARLY WARNING MODULE    │ │   ⚡ ALERT CORRELATION & DEDUP ENGINE     │
 ├───────────────────────────────────────────┤ ├───────────────────────────────────────────┤
 │ • Real-time host behavioral telemetry     │ │ • 12-stage automated alert pipeline       │
 │ • File entropy & mass churn tracking      │ │ • Fingerprint hashing & 5-min window dedup│
@@ -89,7 +89,7 @@ Modern enterprise security and SRE teams face two crippling challenges:
 
 ---
 
-## 🛡️ Core 1: Ransomware Early Warning System (HPE #05)
+## 🛡️ Core 1: Ransomware Early Warning System
 
 RansomEye monitors multi-vector telemetry across host endpoints to catch ransomware activity in the **pre-encryption staging phase**.
 
@@ -112,7 +112,7 @@ Host Telemetry Ingestion ──► Feature Windowing ──► Weighted Risk Eng
 
 ### Reproducible Demo Scenarios
 
-RansomEye includes three seeded, one-click demo scenarios available directly at `/ransomware`:
+RansomEye includes three seeded, one-click demo scenarios available directly at `/`:
 
 - 🟢 **`NORMAL_ACTIVITY`**: Standard workplace telemetry baseline (office documents, browser activity, routine software updates).
 - 🟡 **`SUSPICIOUS_ACTIVITY`**: High-volume backup/archiving script execution — acts as the **false-positive control** (high file churn but zero ransomware tradecraft signatures).
@@ -120,7 +120,7 @@ RansomEye includes three seeded, one-click demo scenarios available directly at 
 
 ---
 
-## ⚡ Core 2: Intelligent Alert Correlation & Deduplication Engine (HPE #10)
+## ⚡ Core 2: Intelligent Alert Correlation & Deduplication Engine
 
 When infrastructure incidents occur, IT systems flood monitoring tools with repetitive alerts. RansomEye's correlation engine collapses alert noise by **up to 95%** in real time.
 
@@ -396,7 +396,7 @@ RansomEye/
 │   │   ├── assistant.py             # Interactive AI Copilot assistant
 │   │   ├── db.py                    # SQLAlchemy persistence layer
 │   │   ├── models.py               # Pydantic data schemas
-│   │   └── ransomeye/               # Ransomware Early Warning Detection Core (HPE #05)
+│   │   └── ransomeye/               # Ransomware Early Warning Detection Core
 │   │       ├── telemetry.py         # Multi-vector host event generator
 │   │       ├── features.py          # Rolling feature window extractor
 │   │       ├── detector.py          # Dual Baseline + IsolationForest anomaly detector
@@ -495,7 +495,7 @@ npm run dev
 ### 3️⃣ Quick Verification & Usage
 
 1. Open `http://localhost:3000` in your browser.
-2. Navigate to **Ransomware Early Warning** (`/ransomware`) to run live ransomware attack simulations (`RANSOMWARE_ATTACK` vs `SUSPICIOUS_ACTIVITY`).
+2. Select any demo scenario on the home page to run live ransomware attack simulations (`RANSOMWARE_ATTACK` vs `SUSPICIOUS_ACTIVITY`).
 3. Switch datasets on the **Alert Feed** to execute real-time alert deduplication and correlation over 11M+ log entries.
 
 ---
@@ -571,9 +571,7 @@ Click the button below to deploy the backend directly to Render using [`render.y
 
 ## 🤝 Acknowledgments
 
-RansomEye was designed and built for **HPE Synergy 2026**:
-- **HPE Problem Statement #05**: Ransomware Early Warning System
-- **HPE Problem Statement #10**: Alert Correlation & Deduplication Engine
+RansomEye was designed and built for next-generation cyber defense and enterprise AIOps incident automation.
 
 ---
 
