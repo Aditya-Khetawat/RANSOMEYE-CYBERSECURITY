@@ -60,7 +60,7 @@ export function ContainmentView() {
       <NeedsScenario>
         <NeedsEndpoint>
           {selectedEndpointId && (
-            <div className="grid gap-4 lg:grid-cols-2 items-start">
+            <div data-tour="containment-actions" className="grid gap-4 lg:grid-cols-2 items-start">
               <ContainmentPanel endpointId={selectedEndpointId} onContainmentApproved={markContained} />
               <CopilotPanel endpointId={selectedEndpointId} />
             </div>

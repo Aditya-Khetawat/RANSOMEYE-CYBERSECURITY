@@ -37,7 +37,7 @@ export function BlastRadiusView() {
         <NeedsEndpoint>
           {selectedEndpointId && (
             <>
-              <div className="rounded-xl border border-gray-200 bg-white p-5">
+              <div data-tour="blast-horizons" className="rounded-xl border border-gray-200 bg-white p-5">
                 <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-gray-500">
                   What happens next on {selectedEndpointId}
                 </div>

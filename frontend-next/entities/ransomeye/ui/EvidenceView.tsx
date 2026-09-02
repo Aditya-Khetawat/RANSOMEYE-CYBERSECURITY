@@ -41,6 +41,7 @@ export function EvidenceView() {
         <NeedsEndpoint>
           {selectedEndpointId && (
             <>
+              <div data-tour="evidence-chain" className="flex flex-col gap-4">
               {/* attack chain */}
               <div className="rounded-xl border border-gray-200 bg-white p-4">
                 <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">
@@ -77,6 +78,7 @@ export function EvidenceView() {
                 endpointId={selectedEndpointId}
                 state={selectedState}
               />
+              </div>
 
               {/* chronological evidence timeline */}
               {timeline.length > 0 && (

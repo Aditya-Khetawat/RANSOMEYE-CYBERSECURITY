@@ -91,6 +91,7 @@ export function DetectionView() {
                 />
               </div>
 
+              <div data-tour="detection-verdict" className="flex flex-col gap-4">
               {/* behavioral signals */}
               <div className="rounded-xl border border-gray-200 bg-white p-4">
                 <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">
@@ -151,6 +152,7 @@ export function DetectionView() {
                 >
                   View evidence →
                 </Link>
+              </div>
               </div>
 
               <div className="grid gap-4 lg:grid-cols-[320px_1fr] items-start">

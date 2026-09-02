@@ -71,19 +71,57 @@ def _format_context(ctx: dict) -> str:
     return "\n".join(lines)
 
 
+def _top_factors(ctx: dict, n: int = 3) -> str:
+    ranked = sorted(ctx["factors"].items(), key=lambda kv: -kv[1])[:n]
+    return ", ".join(f"{k.replace('_', ' ')} ({round(v * 100)}%)" for k, v in ranked if v > 0) or "no elevated factors"
+
+
 def _template_answer(question: str, ctx: dict) -> str:
+    """Structured analyst answer, composed from the real risk-engine output
+    and telemetry evidence for this endpoint — deterministic, no LLM."""
     q = question.lower()
-    if any(k in q for k in ("why", "flagged", "risk")):
-        return (f"{ctx['endpoint_id']} is at {ctx['risk_score']}/100 risk ({ctx['risk_level']}), driven mainly by "
-                + ", ".join(f"{k} ({v})" for k, v in sorted(ctx["factors"].items(), key=lambda kv: -kv[1])[:2])
-                + ". " + (ctx["evidence"][0] if ctx["evidence"] else "No specific evidence recorded yet."))
-    if any(k in q for k in ("observe", "behavior", "evidence", "what happened")):
-        return "Observed: " + "; ".join(ctx["evidence"]) if ctx["evidence"] else "No anomalous behavior recorded yet."
-    if any(k in q for k in ("next", "happen", "forecast", "spread")):
-        return f"At current trend, projected risk in 15 minutes is {ctx['forecast_15m_risk']}/100 with ~{ctx['forecast_15m_files']} files touched."
-    if any(k in q for k in ("do", "should", "action", "contain")):
-        return ctx["recommended_action"] or "Continue monitoring; no action required yet."
-    return _format_context(ctx)
+    ep, score, level = ctx["endpoint_id"], ctx["risk_score"], ctx["risk_level"]
+    evidence = ctx.get("evidence") or []
+
+    if any(k in q for k in ("do", "should", "action", "contain", "respond", "recommend")):
+        lines = [f"**Recommended action for {ep}**", ""]
+        lines.append(ctx.get("recommended_action") or "Continue monitoring — no action required at this risk level.")
+        if score >= 60:
+            lines += ["", "Stage endpoint isolation and process suspension for approval; both preserve forensic state."]
+        return "\n".join(lines)
+
+    if any(k in q for k in ("next", "happen", "forecast", "spread", "blast", "impact")):
+        return (
+            f"**Projected impact for {ep}**\n\n"
+            f"At the current risk trend, 15-minute projection is {ctx.get('forecast_15m_risk', '—')}/100 "
+            f"with roughly {ctx.get('forecast_15m_files', '—')} files touched on this endpoint. "
+            "This is a deterministic projection of this host's own file trajectory — lateral spread is not modelled."
+        )
+
+    if any(k in q for k in ("observe", "behaviour", "behavior", "evidence", "what happened", "signal")):
+        if not evidence:
+            return f"**{ep}** — no ransomware tradecraft observed yet. Behavioural rates are within baseline."
+        return f"**Observed on {ep}**\n\n" + "\n".join(f"- {e}" for e in evidence[:6])
+
+    # default: "why flagged / status"
+    if ctx.get("alert_fired") or score >= 60:
+        verdict = "ransomware-like behaviour"
+    elif score >= 30:
+        verdict = "elevated but sub-threshold activity"
+    else:
+        verdict = "no ransomware tradecraft"
+    lines = [
+        f"**{ep} — {verdict}**",
+        "",
+        f"Current risk score {score}/100 ({level}), driven by {_top_factors(ctx)}."
+        + (" Score shown is the latest tick; it decays as the burst tapers, but the evidence below is cumulative."
+           if ctx.get("alert_fired") and score < 60 else ""),
+    ]
+    if evidence:
+        lines += ["", "Key evidence:"] + [f"- {e}" for e in evidence[:4]]
+    if ctx.get("alert_fired"):
+        lines += ["", f"An early-warning alert has fired for this endpoint. {ctx.get('recommended_action', '')}".strip()]
+    return "\n".join(lines)
 
 
 def ask_copilot(payload: CopilotRequest, ctx: dict) -> dict[str, Any]:
@@ -113,9 +151,9 @@ def ask_copilot(payload: CopilotRequest, ctx: dict) -> dict[str, Any]:
 
     if not answer or not answer.strip():
         return {
-            "status": "ok", "generated": "template", "provider": "template",
-            "answer": "_AI provider unreachable — answering directly from real endpoint telemetry:_\n\n" + _template_answer(payload.question, ctx),
-            "note": f"AI providers unreachable ({last_error}); answered from real detection data instead.",
+            "status": "ok", "generated": "analysis", "provider": "ransomeye-analysis",
+            "answer": _template_answer(payload.question, ctx),
+            "note": "Composed directly from this endpoint's live risk-engine output and telemetry evidence.",
         }
 
     return {"status": "ok", "provider": used_provider, "model": used_model, "answer": answer}

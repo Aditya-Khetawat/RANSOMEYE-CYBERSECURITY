@@ -14,6 +14,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { PostHogPageView } from "@/shared/ui/PostHogPageView";
 import { ScenarioProvider } from "@/entities/ransomeye/model/ScenarioContext";
 import { ScenarioBar } from "@/entities/ransomeye/ui/ScenarioBar";
+import { TourProvider } from "@/entities/ransomeye/model/TourContext";
+import { GuidedTour, JudgeModeButton } from "@/entities/ransomeye/ui/GuidedTour";
 
 type RootLayoutProps = {
   children: ReactNode;
@@ -45,12 +47,16 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               <main className="page-container flex flex-col col-start-3 overflow-auto">
                 {/* Add the banner here, before the navbar */}
                 {config.READ_ONLY && <ReadOnlyBanner />}
-                <ScenarioProvider>
-                  <div className="flex-1">
-                    <ScenarioBar />
-                    {children}
-                  </div>
-                </ScenarioProvider>
+                <TourProvider>
+                  <ScenarioProvider>
+                    <div className="flex-1">
+                      <ScenarioBar />
+                      {children}
+                    </div>
+                    <GuidedTour />
+                    <JudgeModeButton />
+                  </ScenarioProvider>
+                </TourProvider>
                 {/** footer */}
                 {process.env.GIT_COMMIT_HASH &&
                   process.env.SHOW_BUILD_INFO !== "false" && (

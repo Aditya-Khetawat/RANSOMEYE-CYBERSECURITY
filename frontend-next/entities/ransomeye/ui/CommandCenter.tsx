@@ -144,7 +144,7 @@ export function CommandCenter({
     : null;
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+    <div data-tour="command-center" className="rounded-xl border border-gray-200 bg-white overflow-hidden">
       <div className={clsx("flex items-center gap-2.5 px-4 sm:px-5 py-2.5 border-b", ui.cls)}>
         <span className={clsx("w-2 h-2 rounded-full shrink-0", ui.dot)} />
         <ui.Icon className="w-4 h-4 shrink-0" />

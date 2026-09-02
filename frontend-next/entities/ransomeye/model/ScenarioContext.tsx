@@ -37,6 +37,15 @@ interface ScenarioContextValue {
 
   contained: boolean;
   markContained: () => void;
+  resetContained: () => void;
+
+  /** Load a scenario (if not current), pause, jump to a tick, focus an
+   * endpoint — one call. Used by the guided tour to stage each stop. */
+  jumpTo: (opts: {
+    scenario?: ScenarioName;
+    tick?: number;
+    endpointId?: string;
+  }) => Promise<void>;
 
   // derived
   revealedTicks: Tick[];
@@ -56,15 +65,28 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
   const [selectedEndpointId, setSelectedEndpointId] = useState<string | null>(null);
   const [contained, setContained] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // When jumpTo() loads a scenario, it parks a target tick/endpoint here so
+  // the run_id effect below lands there paused instead of autoplaying from 0.
+  const pendingJump = useRef<{ tick?: number; endpointId?: string } | null>(null);
 
   // A freshly-loaded run restarts the story from tick 0, autoplaying, focused
-  // on the story's subject endpoint.
+  // on the story's subject endpoint — unless a jump is pending.
   useEffect(() => {
     if (!run) return;
-    setTickIndex(0);
-    setIsPlaying(true);
     setContained(false);
-    setSelectedEndpointId(run.target_endpoint_id ?? run.endpoints[0]?.id ?? null);
+    const jump = pendingJump.current;
+    pendingJump.current = null;
+    if (jump) {
+      setIsPlaying(false);
+      setTickIndex(jump.tick ?? 0);
+      setSelectedEndpointId(
+        jump.endpointId ?? run.target_endpoint_id ?? run.endpoints[0]?.id ?? null
+      );
+    } else {
+      setTickIndex(0);
+      setIsPlaying(true);
+      setSelectedEndpointId(run.target_endpoint_id ?? run.endpoints[0]?.id ?? null);
+    }
   }, [run?.run_id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -117,6 +139,19 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
     selectEndpoint: setSelectedEndpointId,
     contained,
     markContained: () => setContained(true),
+    resetContained: () => setContained(false),
+    jumpTo: async ({ scenario, tick, endpointId }) => {
+      if (scenario && run?.scenario !== scenario) {
+        // park the destination so the run_id effect lands there, paused
+        pendingJump.current = { tick, endpointId };
+        await doLoad(scenario, 7);
+        await new Promise((r) => setTimeout(r, 400));
+        return;
+      }
+      setIsPlaying(false);
+      if (typeof tick === "number") setTickIndex(tick);
+      if (endpointId) setSelectedEndpointId(endpointId);
+    },
     revealedTicks,
     currentStates,
     activeAlerts,

@@ -221,7 +221,7 @@ function LiveView({
   const pressure = contained ? Math.min(peakRef.current, 100) : risk.score;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div data-tour="lab-live" className="flex flex-col gap-4">
       {/* status strip */}
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3">
         <div className="flex items-center gap-4">
@@ -318,7 +318,11 @@ function LiveView({
 
       {contained && <Containment state={state} />}
 
-      {contained && cf && <Counterfactual state={state} />}
+      {contained && cf && (
+        <div data-tour="lab-outcome">
+          <Counterfactual state={state} />
+        </div>
+      )}
 
       {contained && (state.timeline?.length ?? 0) > 0 && (
         <SixtySecondWindow state={state} />
