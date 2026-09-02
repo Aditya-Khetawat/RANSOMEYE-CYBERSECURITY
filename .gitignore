@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+.pytest_cache/
 
 # Secrets — never commit API keys
 .env
@@ -23,6 +24,7 @@ frontend-next/.next/
 frontend-next/out/
 frontend-next/next-env.d.ts
 frontend-next/.env.local
+frontend-next/tsconfig.tsbuildinfo
 
 # OS
 .DS_Store
