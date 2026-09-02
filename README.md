@@ -83,7 +83,8 @@ Modern enterprise security and SRE teams face two crippling challenges:
 │ • Explainable 0–100 risk score engine     │ │ • Temporal root cause identification      │
 │ • IsolationForest anomaly validation      │ │ • Alert DNA historical incident matching  │
 │ • Approval-gated automated containment    │ │ • AI Remediation Playbooks & SRE runbooks │
-│ • +5m/+10m/+15m encryption impact forecast│ │ • Blast radius prediction & interactive DAG│
+│ • +5m/+10m/+15m encryption impact forecast│ │ • Fleet Network Topology isolation map    │
+│ • Live Precision, Recall & FPR Evaluation │ │ • Interactive SRE terminal simulator      │
 └───────────────────────────────────────────┘ └───────────────────────────────────────────┘
 ```
 
@@ -108,11 +109,13 @@ Host Telemetry Ingestion ──► Feature Windowing ──► Weighted Risk Eng
 | **🧠 Hybrid Risk Scoring** | Combines explainable 0–100 weighted risk heuristic with an `IsolationForest` ML anomaly score | Guarantees transparent auditability while catching novel zero-day behavioral anomalies |
 | **🔮 Impact Forecast** | Computes +5m, +10m, +15m projected encrypted file count, compromised processes, and data volume at risk | Gives incident commanders real-time predictive visibility into potential blast radius |
 | **🛡️ Approval-Gated Containment** | Generates non-destructive (auto-executed) and high-impact (approval-gated) containment plans | Enables instant process suspension and endpoint network isolation without accidental downtime |
+| **🗺️ Fleet Network Topology** | Hub-and-spoke SVG network map showing real per-endpoint risk state & fleet isolation status | Visualizes active domain connectivity and isolated endpoints dynamically |
+| **📉 Real-Time Evaluation** | Calculates Precision, Recall, F1-Score, False Positive Rate (FPR), Detection Latency & MTTR Savings | Delivers verifiable benchmark performance against ground-truth attack telemetry |
 | **🤖 Cyber SOC Copilot** | Powered by **Cerebras Llama-3.3-70B** with real-time telemetry context injection | Provides plain-English threat summaries, MITRE ATT&CK mapping, and interactive investigator chat |
 
 ### Reproducible Demo Scenarios
 
-RansomEye includes three seeded, one-click demo scenarios available directly at `/`:
+RansomEye includes three seeded, one-click demo scenarios available directly on the homepage:
 
 - 🟢 **`NORMAL_ACTIVITY`**: Standard workplace telemetry baseline (office documents, browser activity, routine software updates).
 - 🟡 **`SUSPICIOUS_ACTIVITY`**: High-volume backup/archiving script execution — acts as the **false-positive control** (high file churn but zero ransomware tradecraft signatures).
@@ -169,12 +172,19 @@ The score is cross-validated with an **IsolationForest Anomaly Model**:
 
 $$\text{Score}_{\text{anomaly}} = 100 \cdot \max\left(0, 1 - 2^{\frac{-\mathbb{E}(h(x))}{c(n)}}\right)$$
 
-### 2. Alert Deduplication Fingerprinting
+### 2. Detection Engine Evaluation Metrics
+Detection performance is tracked against ground-truth labels across seeded scenarios:
+
+$$\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}, \quad \text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}, \quad \text{F1} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$$
+
+$$\text{False Positive Rate (FPR)} = \frac{\text{FP}}{\text{FP} + \text{TN}}$$
+
+### 3. Alert Deduplication Fingerprinting
 Alerts are hashed into deduplication buckets across sliding 5-minute time windows:
 
 $$\text{Fingerprint}(a) = \text{MD5}\Big(a.\text{service} \;\|\; a.\text{alertname} \;\|\; \lfloor a.\text{timestamp} / 300 \rfloor\Big)$$
 
-### 3. Semantic TF-IDF + Density DBSCAN Clustering
+### 4. Semantic TF-IDF + Density DBSCAN Clustering
 Alert descriptions $d \in D$ are embedded into TF-IDF vector space:
 
 $$\text{TF-IDF}(t, d, D) = \text{TF}(t, d) \times \log\left(\frac{|D|}{|\{d' \in D : t \in d'\}|}\right)$$
@@ -182,11 +192,6 @@ $$\text{TF-IDF}(t, d, D) = \text{TF}(t, d) \times \log\left(\frac{|D|}{|\{d' \in
 Using cosine distance $d(u, v) = 1 - \frac{u \cdot v}{\|u\|_2 \|v\|_2}$, time-windowed **DBSCAN** forms cluster partitions $\mathcal{C}_k$:
 
 $$\mathcal{N}_{\varepsilon}(p) = \{q \in D \mid \text{dist}(p, q) \le \varepsilon \land |t_p - t_q| \le \Delta T_{\text{window}}\}$$
-
-### 4. Correlation Escalation Risk Score
-The incident escalation risk $E_{\text{cluster}} \in [0.0, 1.0]$ calculates blast expansion rate:
-
-$$E_{\text{cluster}} = 0.40 \cdot \text{GrowthRate} + 0.35 \cdot \text{SeverityWeight} + 0.25 \cdot \text{ServiceSpread}$$
 
 ---
 
@@ -222,10 +227,12 @@ graph TD
         RiskEngine["Explainable Risk<br>Engine (0-100)"]:::ml
         AnomalyDetector["IsolationForest<br>Anomaly Detector"]:::ml
         ContainmentEngine["Defensive Containment<br>& Impact Forecast"]:::backend
+        EvalModule["Real-Time Evaluation<br>Precision / Recall / FPR"]:::backend
 
         FeatureExtractor --> RiskEngine
         RiskEngine --> AnomalyDetector
         AnomalyDetector --> ContainmentEngine
+        AnomalyDetector --> EvalModule
     end
 
     subgraph IntelligenceLayer ["🧠 AI & Forensic Intelligence"]
@@ -257,6 +264,7 @@ graph TD
     XaiRca --> UI
     PlaybookGen --> UI
     ContainmentEngine --> UI
+    EvalModule --> UI
     Llamacopilot --> UI
 ```
 
@@ -279,7 +287,7 @@ Each telemetry event and alert passes through a **12-stage end-to-end pipeline**
 | **9** | **Blast Radius** | Linear projection & cascade horizon forecasting (+5m, +10m, +15m) | Blast Radius Forecast | `backend/app/forecast.py` |
 | **10** | **RCA Confidence** | Multi-signal explainable XAI confidence score with rejection reasons | RCA Confidence % | `backend/app/root_cause_confidence.py` |
 | **11** | **Playbook Gen** | Step-by-step SRE runbooks with interactive terminal execution mode | Interactive Playbook | `backend/app/playbook.py` |
-| **12** | **Evaluation** | Real-time accuracy metrics: Precision, Recall, F1, MTTR savings | Pipeline Metrics | `backend/app/main.py` |
+| **12** | **Evaluation** | Real-time accuracy metrics: Precision, Recall, F1, FPR, MTTR savings | Pipeline Metrics | `backend/app/ransomeye/evaluation.py`<br>`backend/app/main.py` |
 
 ---
 
@@ -291,6 +299,7 @@ Each telemetry event and alert passes through a **12-stage end-to-end pipeline**
 | **Alert Reduction Rate** | 0% (Raw log ingestion) | 10%–20% (Endpoint grouped) | **> 90% Noise Reduction** |
 | **Root Cause Identification** | Manual log searching | Limited to host processes | **Automated Temporal & Topology RCA** |
 | **Risk Explainability** | Black-box severity | Static threat score | **Explainable Weighted Signal Breakdown** |
+| **Fleet Isolation Map** | None / Static list | Text table | **Interactive Hub-and-Spoke SVG Map** |
 | **Historical Incident Matching** | Manual query searching | None | **Automated Alert DNA Cosine Matching** |
 | **Remediation Capabilities** | Manual playbooks | Rigid auto-quarantine | **Approval-Gated Safe Containment** |
 | **AI Investigator Assistant** | Static chatbot / None | Basic summary | **Cerebras Llama-3.3-70B Context Copilot** |
@@ -309,6 +318,8 @@ Each telemetry event and alert passes through a **12-stage end-to-end pipeline**
 - 🚫 **Shadow Copy Protection**: Detects `vssadmin` and recovery removal.
 - 🔮 **+15m Impact Forecast**: Projects encrypted file count & compromised data.
 - ⚡ **Approval-Gated Containment**: Non-destructive auto-execution & gated isolation.
+- 🗺️ **Fleet Network Topology Map**: Real-time hub-and-spoke SVG isolation map.
+- 📉 **Pipeline Evaluation Dashboard**: Live Precision, Recall, F1, FPR & MTTR.
 - 💬 **Cyber SOC Copilot**: AI assistant powered by Cerebras Llama-3.3-70B.
 
 </td>
@@ -340,7 +351,7 @@ Each telemetry event and alert passes through a **12-stage end-to-end pipeline**
 - 🎲 **Synthetic Chaos Injector**: 5 failure scenarios with ground-truth labels.
 - 📦 **Loghub HDFS_v1 Dataset**: Real-world HDFS block anomaly logs.
 - 🏭 **AIOps Challenge 2020**: Production fault injection dataset.
-- 📉 **Pipeline Evaluation Dashboard**: Real-time Precision, Recall, F1, & MTTR.
+- 📈 **Real-Time Benchmarking**: Quantitative evaluation across all datasets.
 
 </td>
 </tr>
@@ -367,9 +378,9 @@ Each telemetry event and alert passes through a **12-stage end-to-end pipeline**
 
 ### Frontend & Visualization Dashboard
 - **Framework**: [Next.js 15](https://nextjs.org/) (App Router, React 19)
-- **Styling**: Tailwind CSS (Dark theme aesthetics)
+- **Styling**: Tailwind CSS (Clean modern light design)
 - **UI Components**: Headless UI, Tremor Components
-- **Graph & Topology**: React Flow, Dagre DAG layout
+- **Graph & Topology**: Custom SVG Hub-and-Spoke, React Flow, Dagre DAG layout
 - **Deployment & Edge**: Vercel Edge Rewrites
 
 </td>
@@ -404,9 +415,11 @@ RansomEye/
 │   │       ├── alerts.py            # Deduplicated endpoint early-warning alerts
 │   │       ├── forecast.py          # +5m/+10m/+15m encryption impact forecast engine
 │   │       ├── containment.py       # Approval-gated defensive containment generator
+│   │       ├── evaluation.py        # Real-time Precision, Recall, FPR & Latency evaluator
 │   │       ├── copilot.py           # Cyber SOC analyst copilot bridge
 │   │       ├── demo.py              # Scenario orchestrator (NORMAL/SUSPICIOUS/RANSOMWARE)
 │   │       └── api.py               # FastAPI router (/ransomeye/*)
+│   ├── tests/                       # Pytest automated test suite
 │   └── requirements.txt             # Python dependencies
 │
 ├── data/
@@ -417,21 +430,23 @@ RansomEye/
 │
 ├── frontend-next/                   # Next.js 15 Production Web Application
 │   ├── app/(keep)/                  # App Router pages
+│   │   ├── page.tsx                 # Primary Home Page (Ransomware Early Warning)
+│   │   ├── evaluation/              # Pipeline Evaluation Dashboard page
 │   │   ├── feed/                    # Live Alert Feed view
 │   │   ├── incidents/               # Correlated Incident details & PR comparator
 │   │   ├── correlations/            # DBSCAN cluster visualization
 │   │   ├── deduplication/           # Deduplication performance dashboard
-│   │   ├── topology/               # Interactive service dependency DAG
-│   │   ├── forecast/               # Blast radius projections
-│   │   ├── timemachine/            # Forensic incident step-replay
-│   │   ├── evaluation/             # Pipeline metrics (Precision, Recall, F1)
-│   │   └── ransomware/             # Ransomware Early Warning Dashboard
-│   ├── entities/                    # TypeScript domain entities
-│   └── components/                  # Reusable UI components & modals
+│   │   └── topology/               # Interactive service dependency DAG
+│   ├── entities/ransomeye/          # Ransomware domain entity components & models
+│   │   ├── ui/NetworkTopology.tsx   # Fleet hub-and-spoke SVG network topology map
+│   │   ├── ui/EvaluationDashboard.tsx# Live detection precision & recall dashboard
+│   │   ├── ui/EvidenceChain.tsx     # Telemetry evidence timeline component
+│   │   └── ui/CommandCenter.tsx     # Active containment response action panel
+│   └── components/                  # Reusable UI primitives & navigation
 │
 ├── render.yaml                      # Render zero-cost blueprint deployment spec
 ├── notebooks/                       # PoC Jupyter research notebooks
-└── README.md                        # Documentation
+└── README.md                        # Project documentation
 ```
 
 ---
@@ -496,7 +511,8 @@ npm run dev
 
 1. Open `http://localhost:3000` in your browser.
 2. Select any demo scenario on the home page to run live ransomware attack simulations (`RANSOMWARE_ATTACK` vs `SUSPICIOUS_ACTIVITY`).
-3. Switch datasets on the **Alert Feed** to execute real-time alert deduplication and correlation over 11M+ log entries.
+3. View the **Network Topology Map** to observe live fleet risk states and approve containment actions to test endpoint isolation.
+4. Navigate to **Evaluation** (`/evaluation`) to view live detection precision, recall, false-positive rate, and MTTR metrics.
 
 ---
 
@@ -532,14 +548,10 @@ Click the button below to deploy the backend directly to Render using [`render.y
 1. Go to [Vercel Dashboard](https://vercel.com/new) $\rightarrow$ Import `RANSOMEYE-CYBERSECURITY`.
 2. Set **Root Directory** to `frontend-next`.
 3. Configure Environment Variables:
-   - `API_URL` = `https://your-backend-name.onrender.com` (the Render service from Option A)
-   - `NEXTAUTH_SECRET` = output of `openssl rand -hex 32`
+   - `API_URL` = `https://your-backend-name.onrender.com`
    - `AUTH_TYPE` = `NO_AUTH`
    - `DISABLE_REDIRECTS` = `true`
 4. Click **Deploy**.
-
-> **Note:** the public demo link is redeployed per milestone. If a shared link
-> looks stale, run locally (below) or redeploy — the code in `main` is current.
 
 ---
 
@@ -560,6 +572,8 @@ Click the button below to deploy the backend directly to Render using [`render.y
 - [x] **IsolationForest ML Anomaly Verification**
 - [x] **Approval-Gated Defensive Containment Generator**
 - [x] **+15m Encryption Blast Horizon Forecasting**
+- [x] **Fleet Network Topology SVG Isolation Map**
+- [x] **Real-Time Detection Evaluation Metrics Dashboard (Precision, Recall, FPR)**
 - [x] **Fingerprint Deduplication Layer (5-min window hashing)**
 - [x] **TF-IDF + DBSCAN Density Clustering Correlation Engine**
 - [x] **Temporal Root Cause Analysis (RCA)**
@@ -581,8 +595,8 @@ RansomEye was designed and built for next-generation cyber defense and enterpris
 
 <div align="center">
 
-**⚡ RansomEye Cyber Security** — *See the attack. Prove it. Understand it. Predict it. Stop it.*
+**⚡ RansomEye Cyber Security** — *Turning alert storms into actionable intelligence and catching ransomware before encryption.*
 
-[![GitHub](https://img.shields.io/badge/Source-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/Aditya-Khetawat/RANSOMEYE-CYBERSECURITY)
+[![Live Demo](https://img.shields.io/badge/🌐_Try_RansomEye_Live-f97316?style=for-the-badge&logo=vercel&logoColor=white)](https://hpe-hackathon-alert-correlation-ded-eta.vercel.app)
 
 </div>
