@@ -1,11 +1,11 @@
-import { RansomwareClient } from "./ransomware/RansomwareClient";
+import { CommandCenterView } from "@/entities/ransomeye/ui/CommandCenterView";
 
 export const metadata = {
-  title: "RansomEye | Ransomware Early Warning",
+  title: "RansomEye | Command Center",
   description:
-    "AI-powered real-time ransomware early warning: behavioral detection across file-system, process, privilege and network telemetry, explainable risk scoring, and approval-gated containment.",
+    "Real-time ransomware early warning across the endpoint fleet: the behavioral kill chain, current posture, and detection lead time.",
 };
 
-export default function HomePage() {
-  return <RansomwareClient />;
+export default function CommandCenterPage() {
+  return <CommandCenterView />;
 }

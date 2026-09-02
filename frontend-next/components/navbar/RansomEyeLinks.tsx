@@ -6,7 +6,17 @@ import { Disclosure } from "@headlessui/react";
 import { IoChevronUp } from "react-icons/io5";
 import { IconType } from "react-icons/lib";
 import clsx from "clsx";
-import { TbBiohazard, TbShieldCheck } from "react-icons/tb";
+import {
+  TbBiohazard,
+  TbShieldCheck,
+  TbFlask,
+  TbLayoutDashboard,
+  TbDeviceDesktop,
+  TbAlertHexagon,
+  TbFingerprint,
+  TbRadar2,
+  TbShieldLock,
+} from "react-icons/tb";
 
 type NavLink = {
   href: string;
@@ -15,6 +25,7 @@ type NavLink = {
   testId: string;
   isExact?: boolean;
   isDemo?: boolean;
+  accent?: boolean;
 };
 
 type NavSection = {
@@ -22,32 +33,41 @@ type NavSection = {
   links: NavLink[];
 };
 
-// RansomEye is a single-purpose product (ransomware early warning) — the
-// alert-correlation engine's own multi-section sidebar (Alerts, Incidents,
-// Noise Reduction, Insights, Platform) was the *inspiration* codebase's
-// navigation, not this product's. Removed along with the frontend page
-// routes and UI components it pointed to. The backend engine itself
-// (backend/app/*.py) stays — RansomEye's detection core reuses its LLM
-// plumbing internally (see backend/app/ransomeye/assistant_bridge.py) — but
-// none of it is exposed as separate user-facing pages any more.
+// The sidebar is the pitch: SEE -> PROVE -> UNDERSTAND -> PREDICT -> STOP.
+// Every page has one job in that story; the inherited alert-correlation
+// pages (Alerts, Correlations, Dedup, Providers, ...) are intentionally not
+// exposed — the backend engine stays, but the judge walks the ransomware
+// story, not the inspiration product.
 const SECTIONS: NavSection[] = [
   {
-    title: "OVERVIEW",
+    title: "SEE",
     links: [
-      {
-        href: "/",
-        label: "Ransomware Early Warning",
-        icon: TbBiohazard,
-        testId: "home",
-        isExact: true,
-      },
-      {
-        href: "/evaluation",
-        label: "Can We Trust It?",
-        icon: TbShieldCheck,
-        testId: "evaluation",
-      },
+      { href: "/", label: "Command Center", icon: TbLayoutDashboard, testId: "home", isExact: true },
+      { href: "/detection", label: "Ransomware Early Warning", icon: TbBiohazard, testId: "detection" },
+      { href: "/fleet", label: "Endpoint Fleet", icon: TbDeviceDesktop, testId: "fleet" },
     ],
+  },
+  {
+    title: "PROVE",
+    links: [
+      { href: "/lab", label: "Attack Lab", icon: TbFlask, testId: "lab", accent: true },
+      { href: "/evaluation", label: "Trust & Evaluation", icon: TbShieldCheck, testId: "evaluation" },
+    ],
+  },
+  {
+    title: "UNDERSTAND",
+    links: [
+      { href: "/incidents", label: "Incidents", icon: TbAlertHexagon, testId: "incidents" },
+      { href: "/evidence", label: "Evidence", icon: TbFingerprint, testId: "evidence" },
+    ],
+  },
+  {
+    title: "PREDICT",
+    links: [{ href: "/blast-radius", label: "Blast Radius", icon: TbRadar2, testId: "blast-radius" }],
+  },
+  {
+    title: "STOP",
+    links: [{ href: "/containment", label: "Containment", icon: TbShieldLock, testId: "containment" }],
   },
 ];
 
@@ -75,7 +95,19 @@ const NavGroup = ({ title, links }: NavSection) => (
             isExact={link.isExact}
             isBeta={link.isDemo}
           >
-            <Subtitle className="text-xs">{link.label}</Subtitle>
+            <Subtitle
+              className={clsx(
+                "text-xs",
+                link.accent && "font-semibold text-orange-600 dark:text-orange-400"
+              )}
+            >
+              {link.label}
+              {link.accent && (
+                <span className="ml-1.5 rounded bg-orange-100 px-1 py-px text-[9px] font-bold uppercase tracking-wide text-orange-700 dark:bg-orange-950 dark:text-orange-300">
+                  Prove it
+                </span>
+              )}
+            </Subtitle>
           </LinkWithIcon>
         </li>
       ))}

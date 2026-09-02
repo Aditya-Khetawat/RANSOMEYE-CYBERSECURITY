@@ -74,6 +74,7 @@ def client(isolated_db, monkeypatch):
     # scenario into whichever ransomeye test runs next.
     monkeypatch.setattr(main_module, "_initial_load", lambda: None)
     monkeypatch.setattr(main_module, "_initial_load_ransomeye", lambda: None)
+    monkeypatch.setattr(main_module, "_precompute_ransomeye_evaluation", lambda: None)
     with TestClient(main_module.app) as c:
         yield c
 

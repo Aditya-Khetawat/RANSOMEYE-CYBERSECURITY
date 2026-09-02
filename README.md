@@ -6,7 +6,7 @@
 
 > **Detecting ransomware kill chains before encryption occurs — and collapsing infrastructure alert storms into single, actionable incidents.**
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-RansomEye-f97316?style=for-the-badge&logo=vercel&logoColor=white)](https://hpe-hackathon-alert-correlation-ded-eta.vercel.app)
+[![Deploy](https://img.shields.io/badge/▶_Run_It-Local_or_Vercel+Render-f97316?style=for-the-badge&logo=vercel&logoColor=white)](#-getting-started)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Next.js](https://img.shields.io/badge/Frontend-Next.js_15-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org)
 [![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
@@ -532,10 +532,14 @@ Click the button below to deploy the backend directly to Render using [`render.y
 1. Go to [Vercel Dashboard](https://vercel.com/new) $\rightarrow$ Import `RANSOMEYE-CYBERSECURITY`.
 2. Set **Root Directory** to `frontend-next`.
 3. Configure Environment Variables:
-   - `API_URL` = `https://your-backend-name.onrender.com`
+   - `API_URL` = `https://your-backend-name.onrender.com` (the Render service from Option A)
+   - `NEXTAUTH_SECRET` = output of `openssl rand -hex 32`
    - `AUTH_TYPE` = `NO_AUTH`
    - `DISABLE_REDIRECTS` = `true`
 4. Click **Deploy**.
+
+> **Note:** the public demo link is redeployed per milestone. If a shared link
+> looks stale, run locally (below) or redeploy — the code in `main` is current.
 
 ---
 
@@ -577,8 +581,8 @@ RansomEye was designed and built for next-generation cyber defense and enterpris
 
 <div align="center">
 
-**⚡ RansomEye Cyber Security** — *Turning alert storms into actionable intelligence and catching ransomware before encryption.*
+**⚡ RansomEye Cyber Security** — *See the attack. Prove it. Understand it. Predict it. Stop it.*
 
-[![Live Demo](https://img.shields.io/badge/🌐_Try_RansomEye_Live-f97316?style=for-the-badge&logo=vercel&logoColor=white)](https://hpe-hackathon-alert-correlation-ded-eta.vercel.app)
+[![GitHub](https://img.shields.io/badge/Source-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/Aditya-Khetawat/RANSOMEYE-CYBERSECURITY)
 
 </div>

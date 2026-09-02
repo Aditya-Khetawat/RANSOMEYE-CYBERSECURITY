@@ -64,6 +64,18 @@ def extract_features(history: list[dict], endpoint_id: str, upto_tick: int) -> d
 
     privilege_events = [e for e in events if e["type"] == "privilege"]
 
+    # Recovery inhibition — shadow-copy deletion / recovery disabling. Called
+    # out on its own because it is a near-unambiguous ransomware precursor
+    # (there is no legitimate bulk reason to destroy every restore point):
+    # alerts.py uses it to raise an *early* warning during the staging phase,
+    # before mass encryption has pushed the weighted score over threshold.
+    recovery_inhibition = any(
+        e.get("action") in ("shadow_copy_delete",) for e in privilege_events
+    ) or any(
+        {"shadow_copy_deletion", "disables_recovery"} & set(e.get("suspicious_indicators", []))
+        for e in suspicious_procs
+    )
+
     network_events = [e for e in events if e["type"] == "network"]
     malicious_conns = [e for e in network_events if e.get("reputation") == "malicious"]
     external_conns = [e for e in network_events if e.get("is_external")]
@@ -108,6 +120,7 @@ def extract_features(history: list[dict], endpoint_id: str, upto_tick: int) -> d
         "network_conn_rate": round(len(network_events) / n_windows, 2),
         "malicious_conn_rate": round(len(malicious_conns) / n_windows, 2),
         "external_conn_ratio": round(len(external_conns) / len(network_events), 2) if network_events else 0.0,
+        "recovery_inhibition": recovery_inhibition,
     }
 
     evidence: list[str] = []

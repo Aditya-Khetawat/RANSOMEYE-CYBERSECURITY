@@ -12,6 +12,8 @@ import { ThemeScript, WatchUpdateTheme } from "@/shared/ui";
 import "@/app/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import { PostHogPageView } from "@/shared/ui/PostHogPageView";
+import { ScenarioProvider } from "@/entities/ransomeye/model/ScenarioContext";
+import { ScenarioBar } from "@/entities/ransomeye/ui/ScenarioBar";
 
 type RootLayoutProps = {
   children: ReactNode;
@@ -43,7 +45,12 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               <main className="page-container flex flex-col col-start-3 overflow-auto">
                 {/* Add the banner here, before the navbar */}
                 {config.READ_ONLY && <ReadOnlyBanner />}
-                <div className="flex-1">{children}</div>
+                <ScenarioProvider>
+                  <div className="flex-1">
+                    <ScenarioBar />
+                    {children}
+                  </div>
+                </ScenarioProvider>
                 {/** footer */}
                 {process.env.GIT_COMMIT_HASH &&
                   process.env.SHOW_BUILD_INFO !== "false" && (

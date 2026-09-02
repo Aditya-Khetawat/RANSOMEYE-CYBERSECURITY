@@ -43,6 +43,7 @@ from .risk_score import escalation_risk
 from .summarizer import summarize
 from .ransomeye import demo as ransomeye_demo
 from .ransomeye.api import router as ransomeye_router
+from .ransomeye.lab import lab_router as ransomeye_lab_router
 
 _dna: AlertDNA | None = None
 _state: dict = {"dedup_stats": None, "clusters": [], "noise": [], "raw_alerts": [], "evaluation": None, "dataset": "none"}
@@ -286,6 +287,20 @@ def _initial_load_ransomeye() -> None:
     ransomeye_state["run"] = ransomeye_demo.run_scenario("NORMAL_ACTIVITY", seed=7)
 
 
+def _precompute_ransomeye_evaluation() -> None:
+    # The evaluation runs every scenario at every seed for real (24 seeds ×
+    # 3 scenarios through the full pipeline + IsolationForest) — ~15s on a
+    # dev box, longer on a free-tier host. Warm the cache on startup in a
+    # background thread so the first judge to open /evaluation gets the
+    # cached result instantly instead of a 60-120s hang / gateway timeout.
+    try:
+        from .ransomeye import evaluation as ransomeye_eval
+        from .ransomeye.api import _state as ransomeye_state
+        ransomeye_state["evaluation"] = ransomeye_eval.compute_evaluation()
+    except Exception:  # never let a warm-up failure crash startup
+        pass
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     db.init_db()
@@ -300,6 +315,7 @@ async def lifespan(app: FastAPI):
     loop = asyncio.get_event_loop()
     loop.run_in_executor(None, _initial_load)
     loop.run_in_executor(None, _initial_load_ransomeye)
+    loop.run_in_executor(None, _precompute_ransomeye_evaluation)
     yield
 
 
@@ -307,6 +323,7 @@ app = FastAPI(title="RansomEye — AI-Powered Real-Time Ransomware Early Warning
 app.add_middleware(CORSMiddleware, allow_origins=["*"],
                    allow_methods=["*"], allow_headers=["*"])
 app.include_router(ransomeye_router)
+app.include_router(ransomeye_lab_router)
 
 
 @app.post("/ingest")

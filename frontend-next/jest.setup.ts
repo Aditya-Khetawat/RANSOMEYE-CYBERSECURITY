@@ -1,8 +1,29 @@
 import "@testing-library/jest-dom";
-import "@/shared/tests/next-auth-mock";
 import React from "react";
 
-// Mocks
+// --- next-auth (was shared/tests/next-auth-mock.tsx, removed with the Keep
+// scaffolding — inlined here since jest.setup is the only consumer) ---------
+jest.mock("next-auth/react", () => ({
+  SessionProvider: ({ children }: { children: React.ReactNode }) =>
+    React.createElement(React.Fragment, null, children),
+  useSession: () => ({
+    data: {
+      user: {
+        id: "test-user-id",
+        name: "Test User",
+        email: "test@example.com",
+        image: null,
+        accessToken: "test-token",
+      },
+      expires: "2099-12-31",
+    },
+    status: "authenticated",
+  }),
+  signIn: jest.fn(),
+  signOut: jest.fn(),
+}));
+
+// --- jsdom gaps -----------------------------------------------------------
 window.ResizeObserver = class ResizeObserver {
   observe() {}
   unobserve() {}
@@ -11,8 +32,22 @@ window.ResizeObserver = class ResizeObserver {
 
 window.confirm = jest.fn();
 
+if (!window.matchMedia) {
+  window.matchMedia = jest.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  }));
+}
+
+// --- module mocks (only for things still in the tree) --------------------
 jest.mock("react-code-blocks", () => ({
-  CopyBlock: ({ text }: { text: string }) => null,
+  CopyBlock: () => null,
   a11yLight: {},
 }));
 
@@ -33,70 +68,13 @@ jest.mock("next/navigation", () => ({
     push: jest.fn(),
     replace: jest.fn(),
     back: jest.fn(),
+    refresh: jest.fn(),
+    prefetch: jest.fn(),
   }),
-  usePathname: () => "/alerts/feed",
+  usePathname: () => "/",
   useSearchParams: () => new URLSearchParams(),
 }));
 
-// Mock useConfig hook
 jest.mock("@/utils/hooks/useConfig", () => ({
-  useConfig: jest.fn().mockReturnValue({
-    data: {},
-  }),
-}));
-
-// Mock CreateOrUpdatePresetForm
-jest.mock("@/features/presets/create-or-update-preset", () => ({
-  CreateOrUpdatePresetForm: ({ onCancel }: any) => {
-    return React.createElement('div', { 'data-testid': 'create-or-update-preset-form' });
-  },
-}));
-
-// Mock PushAlertToServerModal
-jest.mock("@/features/alerts/simulate-alert", () => ({
-  PushAlertToServerModal: ({ isOpen, handleClose }: any) => {
-    return isOpen ? React.createElement('div', { 'data-testid': 'push-alert-modal' }) : null;
-  },
-}));
-
-// Mock AlertErrorEventModal
-jest.mock("@/features/alerts/alert-error-event-process", () => ({
-  AlertErrorEventModal: ({ isOpen, onClose }: any) => {
-    return isOpen ? React.createElement('div', { 'data-testid': 'error-alert-modal' }) : null;
-  },
-}));
-
-
-// Mock usePresets
-jest.mock("@/entities/presets/model/usePresets", () => ({
-  usePresets: jest.fn(() => ({
-    dynamicPresets: [],
-    staticPresets: [],
-    isLoading: false,
-  })),
-}));
-
-// Mock useAlerts
-jest.mock("@/entities/alerts/model", () => ({
-  useAlerts: jest.fn(() => ({
-    useErrorAlerts: jest.fn(() => ({ data: [] })),
-  })),
-}));
-
-// Mock react-icons
-jest.mock("react-icons/gr", () => ({
-  GrTest: () => null,
-}));
-
-jest.mock("react-icons/md", () => ({
-  MdErrorOutline: () => null,
-}));
-
-jest.mock("react-icons/tb", () => ({
-  TbSparkles: () => null,
-}));
-
-// Mock AlertsRulesBuilder to avoid navigation issues
-jest.mock("@/features/presets/presets-manager/ui/alerts-rules-builder", () => ({
-  AlertsRulesBuilder: () => React.createElement('div', { 'data-testid': 'alerts-rules-builder' }),
+  useConfig: jest.fn().mockReturnValue({ data: {} }),
 }));

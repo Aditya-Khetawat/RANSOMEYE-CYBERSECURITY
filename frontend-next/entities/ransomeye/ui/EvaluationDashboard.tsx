@@ -94,14 +94,16 @@ export function EvaluationDashboard() {
     <div className="flex flex-col gap-4">
       <div>
         <span className="text-[11px] font-semibold tracking-[0.14em] uppercase text-red-500">
-          Evaluation
+          Prove
         </span>
         <h1 className="text-2xl font-bold tracking-tight text-gray-900 mt-1">
-          Can We Trust It?
+          Trust &amp; Evaluation
         </h1>
         <Text className="text-sm text-gray-500 mt-1 max-w-2xl">
-          Every scenario replayed at every seed below, for real — precision, recall and detection lead time are
-          measured outcomes, not asserted numbers.
+          Reproducible evaluation of ransomware detection, false positives and early-warning performance.
+          Every scenario is replayed at every seed for real — precision, recall and detection lead time are
+          measured outcomes, not asserted numbers. We also measure <em>how early</em> detection fires, and
+          where that warning window disappears.
         </Text>
       </div>
 
