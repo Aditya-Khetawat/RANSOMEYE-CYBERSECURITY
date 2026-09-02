@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import useSWR, { SWRConfiguration } from "swr";
+import useSWRImmutable from "swr/immutable";
 import { useApi } from "@/shared/lib/hooks/useApi";
 import type {
   ContainmentAction,
@@ -7,6 +8,7 @@ import type {
   CopilotMessage,
   CopilotResponse,
   EndpointForecast,
+  EvaluationResult,
   ScenarioName,
   ScenarioRun,
 } from "./types";
@@ -133,4 +135,18 @@ export const useRansomEyeCopilot = () => {
   );
 
   return { ask, isAsking };
+};
+
+/** GET /ransomeye/evaluation — real detection outcomes measured across a
+ * fixed seed set (see backend/app/ransomeye/evaluation.py). Immutable and
+ * not revalidated: the backend actually re-runs every scenario at every
+ * seed on first call (several seconds), same reasoning as the alert
+ * correlation engine's own /evaluation. */
+export const useRansomEyeEvaluation = (options: SWRConfiguration = {}) => {
+  const api = useApi();
+  return useSWRImmutable<EvaluationResult>(
+    api.isReady() ? "/ransomeye/evaluation" : null,
+    (url: string) => api.get(url),
+    options
+  );
 };

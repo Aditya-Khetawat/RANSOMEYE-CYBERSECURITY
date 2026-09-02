@@ -148,10 +148,17 @@ def _baseline_noise(ep: dict, base: datetime, tick: int) -> list[dict]:
 
 def _suspicious_stage_events(ep: dict, base: datetime, tick: int, local_tick: int) -> list[dict]:
     """SUSPICIOUS_ACTIVITY target: one odd script + one unusual connection +
-    a handful of extra file writes. Deliberately stops well short of the
-    ransomware tradecraft below (no shadow-copy deletion, no mass rename, no
-    entropy spike) — this is the false-positive control case: anomalous, but
-    not an attack, and the detector should say so."""
+    a batch of extra file writes (a backup/archiving job is the cover story).
+    Deliberately stops well short of the ransomware tradecraft below (no
+    shadow-copy deletion, no mass rename, no malicious-reputation contact,
+    no entropy spike) — this is the false-positive control case: anomalous,
+    sometimes loudly so, but not an attack, and the detector should say so
+    regardless of how noisy the run gets.
+
+    Intensity varies per seed (2-14 files/tick, not a fixed narrow band) —
+    a false-positive control that is only ever quiet would be an easy test,
+    not a real one; some seeds here get genuinely close to looking like a
+    bulk file operation."""
     events: list[dict] = []
     if local_tick == 2:
         events.append(_process_event(
@@ -160,18 +167,26 @@ def _suspicious_stage_events(ep: dict, base: datetime, tick: int, local_tick: in
             indicators=["unsigned_script"],
         ))
     if local_tick in (3, 4, 5):
-        for _ in range(random.randint(2, 4)):
+        for _ in range(random.randint(2, 14)):
             events.append(_file_event(ep, base, tick, "modify"))
     if local_tick == 4:
         events.append(_network_event(ep, base, tick, dest_ip="203.0.113.44", dest_port=8080,
-                                     reputation="unknown", bytes_out=random.randint(5_000, 20_000)))
+                                     reputation="unknown", bytes_out=random.randint(5_000, 60_000)))
     return events
 
 
 # (local_tick, builder) — the ransomware kill chain on the target endpoint.
 # Mirrors the alert correlation engine's cascade-of-tuples style in
 # synthetic_alert_generator.py.
-def _ransomware_stage_events(ep: dict, base: datetime, tick: int, local_tick: int) -> list[dict]:
+def _ransomware_stage_events(
+    ep: dict, base: datetime, tick: int, local_tick: int, skip_defense_evasion: bool
+) -> list[dict]:
+    """skip_defense_evasion: some real ransomware skips shadow-copy deletion
+    and recovery-disabling entirely to encrypt faster ("smash and grab"
+    rather than methodical defense evasion) — modeled here so the evaluation
+    actually tests whether detection holds on the *remaining* signals (mass
+    rename, entropy flip, C2 contact) alone, rather than only ever testing
+    the full seven-signal case."""
     events: list[dict] = []
 
     # Stage 1 (t=2-3): initial access — macro-spawned PowerShell, encoded
@@ -194,8 +209,9 @@ def _ransomware_stage_events(ep: dict, base: datetime, tick: int, local_tick: in
     # mass file activity begins (not a separate earlier dwell period) —
     # real ransomware disables recovery immediately before/as it starts
     # encrypting, so the two signals corroborate each other in the same
-    # rolling window rather than aging out independently.
-    if local_tick == 6:
+    # rolling window rather than aging out independently. Skipped entirely
+    # for the smash-and-grab variant (see skip_defense_evasion above).
+    if not skip_defense_evasion and local_tick == 6:
         events.append(_process_event(
             ep, base, tick, image="vssadmin.exe", parent_image="cmd.exe",
             cmdline="vssadmin.exe delete shadows /all /quiet",
@@ -203,7 +219,7 @@ def _ransomware_stage_events(ep: dict, base: datetime, tick: int, local_tick: in
         ))
         events.append(_privilege_event(ep, base, tick, "shadow_copy_delete",
                                        "All volume shadow copies deleted via vssadmin"))
-    if local_tick == 7:
+    if not skip_defense_evasion and local_tick == 7:
         events.append(_process_event(
             ep, base, tick, image="bcdedit.exe", parent_image="cmd.exe",
             cmdline="bcdedit.exe /set {default} recoveryenabled No",
@@ -214,15 +230,19 @@ def _ransomware_stage_events(ep: dict, base: datetime, tick: int, local_tick: in
 
     # Stage 3 (t=7-13): rapid mass file activity — dozens of files per tick
     # across every directory, touching every extension on the endpoint.
+    # Intensity varies per seed: some runs are a loud, fast smash-and-grab,
+    # others a quieter/slower encryptor throttling itself to stay under
+    # naive rate-limit rules — the detector needs to catch both, not just
+    # the loud case, so the range spans a real stealthy-to-loud spectrum.
     if 7 <= local_tick <= 13:
-        n = random.randint(18, 34)
+        n = random.randint(8, 40)
         for _ in range(n):
             events.append(_file_event(ep, base, tick, "modify", ext=random.choice(NORMAL_EXTENSIONS)))
 
     # Stage 4 (t=9-14): entropy spike + mass rename to a shared, unfamiliar
     # extension — the format-independent "encryption in progress" tell.
     if 9 <= local_tick <= 14:
-        n = random.randint(15, 28)
+        n = random.randint(6, 32)
         ransom_ext = RANSOM_EXTENSIONS[0]
         for _ in range(n):
             src_ext = random.choice(NORMAL_EXTENSIONS)
@@ -250,6 +270,12 @@ def generate_scenario(scenario: str, seed: int | None = None) -> dict[str, Any]:
         random.seed(seed)
     base = datetime.now().replace(microsecond=0)
 
+    # Decided once per run, not per tick: roughly a third of ransomware runs
+    # skip defense evasion entirely (see _ransomware_stage_events) — this is
+    # what the evaluation page's detection rate is actually measured across,
+    # not just the loud full-kill-chain case.
+    skip_defense_evasion = scenario == "RANSOMWARE_ATTACK" and random.random() < 0.35
+
     n_ticks = {"NORMAL_ACTIVITY": 10, "SUSPICIOUS_ACTIVITY": 10, "RANSOMWARE_ATTACK": 20}[scenario]
     ticks: list[dict] = []
 
@@ -261,7 +287,7 @@ def generate_scenario(scenario: str, seed: int | None = None) -> dict[str, Any]:
                 if scenario == "SUSPICIOUS_ACTIVITY":
                     evs += _suspicious_stage_events(ep, base, t, t)
                 elif scenario == "RANSOMWARE_ATTACK":
-                    evs += _ransomware_stage_events(ep, base, t, t)
+                    evs += _ransomware_stage_events(ep, base, t, t, skip_defense_evasion)
             events_by_endpoint[ep["id"]] = evs
         ticks.append({"tick": t, "ts": _ts(base, t), "events_by_endpoint": events_by_endpoint})
 
@@ -271,4 +297,5 @@ def generate_scenario(scenario: str, seed: int | None = None) -> dict[str, Any]:
         "endpoints": FLEET,
         "target_endpoint_id": TARGET_ENDPOINT_ID if scenario != "NORMAL_ACTIVITY" else None,
         "ticks": ticks,
+        "variant": {"skip_defense_evasion": skip_defense_evasion} if scenario == "RANSOMWARE_ATTACK" else None,
     }

@@ -6,4 +6,5 @@ export {
   useEndpointForecast,
   useContainment,
   useRansomEyeCopilot,
+  useRansomEyeEvaluation,
 } from "./model/useRansomEye";

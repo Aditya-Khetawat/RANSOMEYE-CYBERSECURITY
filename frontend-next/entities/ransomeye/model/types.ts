@@ -194,3 +194,46 @@ export interface CopilotResponse {
   answer: string;
   note?: string;
 }
+
+/** GET /ransomeye/evaluation */
+export interface KillChainVariantResult {
+  seeds_tested: number;
+  alerts_fired: number;
+  detection_rate_pct: number;
+  mean_lead_seconds: number | null;
+}
+
+export interface PerScenarioEvaluation {
+  seeds_tested: number;
+  alerts_fired: number;
+  expected_to_fire: boolean;
+  fire_rate_pct: number;
+  mean_peak_risk: number;
+  min_peak_risk: number;
+  max_peak_risk: number;
+  full_kill_chain?: KillChainVariantResult;
+  smash_and_grab?: KillChainVariantResult;
+}
+
+export interface ConfusionMatrix {
+  tp: number;
+  fp: number;
+  fn: number;
+  tn: number;
+}
+
+export interface EvaluationResult {
+  seeds_tested: number[];
+  per_scenario: Record<ScenarioName, PerScenarioEvaluation>;
+  confusion_matrix: ConfusionMatrix;
+  precision: number | null;
+  recall: number | null;
+  f1: number | null;
+  false_positive_rate: number | null;
+  detection_lead_seconds: {
+    n: number;
+    mean: number | null;
+    min: number | null;
+    max: number | null;
+  };
+}

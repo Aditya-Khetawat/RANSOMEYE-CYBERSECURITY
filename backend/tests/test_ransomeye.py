@@ -23,9 +23,11 @@ def isolated_ransomeye_state():
 
     ransomeye_api._state["run"] = None
     ransomeye_api._state["containment_by_endpoint"] = {}
+    ransomeye_api._state["evaluation"] = None
     yield
     ransomeye_api._state["run"] = None
     ransomeye_api._state["containment_by_endpoint"] = {}
+    ransomeye_api._state["evaluation"] = None
 
 
 class TestScenarioSeparation:
@@ -178,3 +180,59 @@ class TestApi:
         client.post("/ransomeye/demo/NORMAL_ACTIVITY?seed=7")
         resp = client.get("/ransomeye/endpoints/DOES-NOT-EXIST")
         assert resp.status_code == 404
+
+    def test_evaluation_endpoint_shape(self, client):
+        resp = client.get("/ransomeye/evaluation")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert set(data["per_scenario"]) == {"NORMAL_ACTIVITY", "SUSPICIOUS_ACTIVITY", "RANSOMWARE_ATTACK"}
+        assert data["precision"] is not None
+        assert data["recall"] is not None
+
+    def test_evaluation_is_cached_across_calls(self, client):
+        first = client.get("/ransomeye/evaluation").json()
+        second = client.get("/ransomeye/evaluation").json()
+        assert first == second
+
+
+class TestEvaluation:
+    """Runs the real evaluation once (slow: exercises every scenario at
+    every seed) and asserts on the actual measured outcome, not a fixed
+    expectation — this is what "can we trust it?" has to mean: the number
+    comes from executing demo.run_scenario for real, not from a constant."""
+
+    @staticmethod
+    @pytest.fixture(scope="class")
+    def result():
+        from app.ransomeye.evaluation import compute_evaluation
+        return compute_evaluation()
+
+    def test_zero_false_positives_across_negative_scenarios(self, result):
+        # NORMAL_ACTIVITY and SUSPICIOUS_ACTIVITY must never fire — this is
+        # the same false-positive-control claim the scenarios themselves
+        # make, now checked across every seed instead of just seed=7.
+        assert result["confusion_matrix"]["fp"] == 0
+        assert result["false_positive_rate"] == 0.0
+
+    def test_full_detection_of_both_kill_chain_variants(self, result):
+        ransomware = result["per_scenario"]["RANSOMWARE_ATTACK"]
+        assert ransomware["full_kill_chain"]["detection_rate_pct"] == 100.0
+        assert ransomware["smash_and_grab"]["detection_rate_pct"] == 100.0
+
+    def test_full_kill_chain_gives_more_advance_warning_than_smash_and_grab(self, result):
+        # An honest, disclosed tradeoff, not a claim: the smash-and-grab
+        # variant skips the early privilege-escalation/shadow-copy signals,
+        # so the alert has fewer independent signals to fire on ahead of the
+        # encryption itself, and warns later on average as a result.
+        ransomware = result["per_scenario"]["RANSOMWARE_ATTACK"]
+        full_lead = ransomware["full_kill_chain"]["mean_lead_seconds"]
+        smash_lead = ransomware["smash_and_grab"]["mean_lead_seconds"]
+        assert full_lead is not None and smash_lead is not None
+        assert full_lead > smash_lead
+
+    def test_precision_recall_f1_are_internally_consistent(self, result):
+        cm = result["confusion_matrix"]
+        tp, fp, fn = cm["tp"], cm["fp"], cm["fn"]
+        assert (tp + fp) > 0 and (tp + fn) > 0, "expected a mix of positive/negative runs in the seed set"
+        assert result["precision"] == round(tp / (tp + fp), 3)
+        assert result["recall"] == round(tp / (tp + fn), 3)

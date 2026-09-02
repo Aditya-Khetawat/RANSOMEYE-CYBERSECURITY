@@ -15,11 +15,12 @@ from fastapi import APIRouter, HTTPException
 from . import containment as containment_mod
 from . import copilot as copilot_mod
 from . import demo as demo_mod
+from . import evaluation as evaluation_mod
 from .forecast import compute_forecast
 
 router = APIRouter(prefix="/ransomeye", tags=["ransomeye"])
 
-_state: dict[str, Any] = {"run": None, "containment_by_endpoint": {}}
+_state: dict[str, Any] = {"run": None, "containment_by_endpoint": {}, "evaluation": None}
 
 
 def _require_run() -> dict:
@@ -101,6 +102,17 @@ def approve_containment_action(endpoint_id: str, action_id: str) -> dict:
     if not action:
         raise HTTPException(status_code=404, detail=f"Action {action_id} not found in {endpoint_id}'s containment plan.")
     return {"endpoint_id": endpoint_id, "action": action}
+
+
+@router.get("/evaluation")
+def get_evaluation() -> dict:
+    """Can we trust it? Runs every scenario at every seed for real (see
+    evaluation.py) and caches the result — this is a real measurement, not a
+    per-request recomputation, same reasoning as the alert correlation
+    engine's own /evaluation (app/main.py)."""
+    if _state["evaluation"] is None:
+        _state["evaluation"] = evaluation_mod.compute_evaluation()
+    return _state["evaluation"]
 
 
 @router.post("/copilot")

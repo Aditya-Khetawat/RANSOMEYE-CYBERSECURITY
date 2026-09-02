@@ -90,6 +90,7 @@ def run_scenario(scenario: str, seed: int | None = None) -> dict[str, Any]:
         "run_id": raw["run_id"],
         "endpoints": endpoints,
         "target_endpoint_id": raw["target_endpoint_id"],
+        "variant": raw.get("variant"),
         "ticks": ticks_out,
         "alerts": all_alerts,
         "summary": {

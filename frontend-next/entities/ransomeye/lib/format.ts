@@ -30,9 +30,9 @@ export const factorLabel = (key: string): string =>
  * contribution_pct can reach, used to normalize each factor's bar to its
  * own ceiling rather than a shared one. */
 export const FACTOR_WEIGHT_MAX: Record<string, number> = {
-  encryption_pattern: 35,
+  encryption_pattern: 42,
   process_behavior: 25,
-  privilege_escalation: 20,
+  privilege_escalation: 13,
   network_abnormality: 20,
 };
 

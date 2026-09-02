@@ -6,7 +6,7 @@ import { Disclosure } from "@headlessui/react";
 import { IoChevronUp } from "react-icons/io5";
 import { IconType } from "react-icons/lib";
 import clsx from "clsx";
-import { TbBiohazard } from "react-icons/tb";
+import { TbBiohazard, TbShieldCheck } from "react-icons/tb";
 
 type NavLink = {
   href: string;
@@ -40,6 +40,12 @@ const SECTIONS: NavSection[] = [
         icon: TbBiohazard,
         testId: "home",
         isExact: true,
+      },
+      {
+        href: "/evaluation",
+        label: "Can We Trust It?",
+        icon: TbShieldCheck,
+        testId: "evaluation",
       },
     ],
   },
