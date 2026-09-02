@@ -26,8 +26,6 @@ export const middleware = auth(async (request) => {
     return NextResponse.redirect(new URL("/mobile", request.url));
   }
 
-  const session = await auth();
-  const role = session?.userRole;
   const isAuthenticated = !!request.auth;
   // Keep it on header so it can be used in server components
   const requestHeaders = new Headers(request.headers);
@@ -87,11 +85,6 @@ export const middleware = auth(async (request) => {
       `Redirecting to ${redirectTo} because user try to get /signin but already authenticated`
     );
     return NextResponse.redirect(new URL(redirectTo, request.url));
-  }
-
-  // Role-based routing (NOC users)
-  if (role === "noc" && !pathname.startsWith("/alerts")) {
-    return NextResponse.redirect(new URL("/alerts/feed", request.url));
   }
 
   // Allow all other authenticated requests

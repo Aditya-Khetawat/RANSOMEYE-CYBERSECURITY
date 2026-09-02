@@ -3,8 +3,7 @@ import { RansomEyeMark } from "@/components/RansomEyeMark";
 
 export const metadata = {
   title: "RansomEye",
-  description:
-    "Alert correlation, deduplication and AI-driven incident analysis.",
+  description: "AI-powered real-time ransomware early warning.",
 };
 
 export default function RootLayout({

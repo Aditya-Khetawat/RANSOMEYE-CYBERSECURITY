@@ -172,7 +172,13 @@ export default function SignInForm({
     );
   }
 
-  if (providers?.credentials) {
+  // RansomEye only ever runs AUTH_TYPE=NO_AUTH, whose credentials provider
+  // is named "NoAuth" (see auth.config.ts) and is auto-submitted by the
+  // effect above with no user input. A real username/password form must
+  // never render for it — that's the "signup page" flash this app doesn't
+  // want, distinct from a genuine DB-backed credentials provider (name
+  // "Credentials"), which is the only case this form is actually for.
+  if (providers?.credentials && providers.credentials.name === "Credentials") {
     console.log("Rendering form");
     return (
       <>
@@ -250,9 +256,12 @@ export default function SignInForm({
     );
   }
 
+  // RansomEye has no login step — this only ever flashes for a moment while
+  // the effect above establishes the NO_AUTH session, never a form.
   return (
-    <Text className="h-full flex items-center justify-center text-tremor-title font-bold text-tremor-content-strong">
-      Redirecting to authentication...
-    </Text>
+    <div className="h-full flex flex-col items-center justify-center gap-2">
+      <div className="w-5 h-5 rounded-full border-2 border-gray-200 border-t-red-500 animate-spin" />
+      <Text className="text-sm text-gray-400">Loading RansomEye…</Text>
+    </div>
   );
 }
