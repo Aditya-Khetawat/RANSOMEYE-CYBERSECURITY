@@ -25,7 +25,7 @@ function MetricTile({
       <div
         className={
           "mt-1 text-3xl font-bold tabular-nums " +
-          (tone === "good" ? "text-emerald-600 dark:text-emerald-400" : tone === "bad" ? "text-red-600 dark:text-red-400" : "text-gray-900 dark:text-gray-100")
+          (tone === "good" ? "text-emerald-600" : tone === "bad" ? "text-red-600" : "text-gray-900")
         }
       >
         {children}
@@ -43,7 +43,7 @@ const SCENARIO_LABEL: Record<ScenarioName, string> = {
 function ScenarioRow({ scenario, entry }: { scenario: ScenarioName; entry: PerScenarioEvaluation }) {
   const good = entry.expected_to_fire ? entry.fire_rate_pct === 100 : entry.fire_rate_pct === 0;
   return (
-    <tr className="border-b border-gray-100 dark:border-gray-800 last:border-0">
+    <tr className="border-b border-gray-100 last:border-0">
       <td className="py-2 pr-4 font-medium">{SCENARIO_LABEL[scenario]}</td>
       <td className="py-2 pr-4 text-gray-500">{entry.expected_to_fire ? "should alert" : "should NOT alert"}</td>
       <td className="py-2 pr-4">
@@ -51,7 +51,7 @@ function ScenarioRow({ scenario, entry }: { scenario: ScenarioName; entry: PerSc
           {entry.alerts_fired}/{entry.seeds_tested} fired
         </Badge>
       </td>
-      <td className="py-2 pr-4 tabular-nums text-gray-600 dark:text-gray-400">
+      <td className="py-2 pr-4 tabular-nums text-gray-600">
         {entry.min_peak_risk}–{entry.max_peak_risk}/100
       </td>
       <td className="py-2 tabular-nums text-gray-500">avg {entry.mean_peak_risk}/100</td>
@@ -96,7 +96,7 @@ export function EvaluationDashboard() {
         <span className="text-[11px] font-semibold tracking-[0.14em] uppercase text-red-500">
           Evaluation
         </span>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 mt-1">
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 mt-1">
           Can We Trust It?
         </h1>
         <Text className="text-sm text-gray-500 mt-1 max-w-2xl">
@@ -129,7 +129,7 @@ export function EvaluationDashboard() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-[11px] uppercase tracking-wide text-gray-400 border-b border-gray-200 dark:border-gray-800">
+              <tr className="text-left text-[11px] uppercase tracking-wide text-gray-400 border-b border-gray-200">
                 <th className="pb-2 pr-4 font-medium">Scenario</th>
                 <th className="pb-2 pr-4 font-medium">Ground truth</th>
                 <th className="pb-2 pr-4 font-medium">Outcome</th>
@@ -155,7 +155,7 @@ export function EvaluationDashboard() {
             still holds on mass-encryption and network signals alone.
           </Text>
           <div className="grid sm:grid-cols-2 gap-3">
-            <div className="rounded-lg border border-gray-200 dark:border-gray-800 p-3">
+            <div className="rounded-lg border border-gray-200 p-3">
               <div className="text-xs font-semibold uppercase tracking-wide text-gray-500">Full kill chain</div>
               <div className="text-xl font-bold tabular-nums mt-1">
                 {rw.full_kill_chain.detection_rate_pct}%{" "}
@@ -167,7 +167,7 @@ export function EvaluationDashboard() {
                 mean lead time: <strong>{rw.full_kill_chain.mean_lead_seconds}s</strong>
               </div>
             </div>
-            <div className="rounded-lg border border-gray-200 dark:border-gray-800 p-3">
+            <div className="rounded-lg border border-gray-200 p-3">
               <div className="text-xs font-semibold uppercase tracking-wide text-gray-500">
                 Smash-and-grab (no defense evasion)
               </div>
@@ -215,20 +215,20 @@ export function EvaluationDashboard() {
       <Card className="p-4">
         <Title className="text-sm">Confusion matrix</Title>
         <div className="grid grid-cols-2 gap-2 mt-2 max-w-sm text-center text-sm">
-          <div className="rounded bg-emerald-50 dark:bg-emerald-950/40 p-3">
-            <div className="text-xl font-bold text-emerald-700 dark:text-emerald-300">{data.confusion_matrix.tp}</div>
+          <div className="rounded bg-emerald-50 p-3">
+            <div className="text-xl font-bold text-emerald-700">{data.confusion_matrix.tp}</div>
             <div className="text-xs text-gray-500">True Positive</div>
           </div>
-          <div className="rounded bg-gray-50 dark:bg-gray-800/60 p-3">
-            <div className="text-xl font-bold text-gray-700 dark:text-gray-300">{data.confusion_matrix.fn}</div>
+          <div className="rounded bg-gray-50 p-3">
+            <div className="text-xl font-bold text-gray-700">{data.confusion_matrix.fn}</div>
             <div className="text-xs text-gray-500">False Negative</div>
           </div>
-          <div className="rounded bg-gray-50 dark:bg-gray-800/60 p-3">
-            <div className="text-xl font-bold text-gray-700 dark:text-gray-300">{data.confusion_matrix.fp}</div>
+          <div className="rounded bg-gray-50 p-3">
+            <div className="text-xl font-bold text-gray-700">{data.confusion_matrix.fp}</div>
             <div className="text-xs text-gray-500">False Positive</div>
           </div>
-          <div className="rounded bg-emerald-50 dark:bg-emerald-950/40 p-3">
-            <div className="text-xl font-bold text-emerald-700 dark:text-emerald-300">{data.confusion_matrix.tn}</div>
+          <div className="rounded bg-emerald-50 p-3">
+            <div className="text-xl font-bold text-emerald-700">{data.confusion_matrix.tn}</div>
             <div className="text-xs text-gray-500">True Negative</div>
           </div>
         </div>

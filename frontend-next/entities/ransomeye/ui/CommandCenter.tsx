@@ -22,25 +22,25 @@ function derivePosture(
 const POSTURE_UI: Record<Posture, { label: string; cls: string; dot: string; Icon: typeof TbShieldCheck }> = {
   protected: {
     label: "PROTECTED",
-    cls: "text-emerald-700 bg-emerald-50 border-emerald-300 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800",
+    cls: "text-emerald-700 bg-emerald-50 border-emerald-300",
     dot: "bg-emerald-500",
     Icon: TbShieldCheck,
   },
   monitoring: {
     label: "MONITORING",
-    cls: "text-amber-700 bg-amber-50 border-amber-300 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800",
+    cls: "text-amber-700 bg-amber-50 border-amber-300",
     dot: "bg-amber-500",
     Icon: TbShieldHalf,
   },
   under_attack: {
     label: "RANSOMWARE STAGING DETECTED",
-    cls: "text-red-700 bg-red-50 border-red-400 dark:bg-red-950/40 dark:text-red-300 dark:border-red-800",
+    cls: "text-red-700 bg-red-50 border-red-400",
     dot: "bg-red-500 animate-pulse",
     Icon: TbAlertOctagon,
   },
   contained: {
     label: "THREAT CONTAINED",
-    cls: "text-emerald-700 bg-emerald-50 border-emerald-400 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800",
+    cls: "text-emerald-700 bg-emerald-50 border-emerald-400",
     dot: "bg-emerald-500",
     Icon: TbShieldCheck,
   },
@@ -70,9 +70,9 @@ function Metric({
       <div
         className={clsx(
           "text-3xl sm:text-4xl font-bold tabular-nums tracking-tight",
-          tone === "danger" && "text-red-600 dark:text-red-400",
-          tone === "good" && "text-emerald-600 dark:text-emerald-400",
-          tone === "default" && "text-gray-900 dark:text-gray-100"
+          tone === "danger" && "text-red-600",
+          tone === "good" && "text-emerald-600",
+          tone === "default" && "text-gray-900"
         )}
       >
         {value}
@@ -144,7 +144,7 @@ export function CommandCenter({
     : null;
 
   return (
-    <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden">
+    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
       <div className={clsx("flex items-center gap-2.5 px-4 sm:px-5 py-2.5 border-b", ui.cls)}>
         <span className={clsx("w-2 h-2 rounded-full shrink-0", ui.dot)} />
         <ui.Icon className="w-4 h-4 shrink-0" />
@@ -200,10 +200,10 @@ export function CommandCenter({
                 key={stage.key}
                 className={clsx(
                   "flex-1 min-w-[8.5rem] rounded-lg border px-2.5 py-2 transition-colors",
-                  !seen && "border-dashed border-gray-200 dark:border-gray-800 text-gray-400",
-                  seen && isContained && "border-emerald-400 bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800",
-                  seen && isWarning && "border-red-400 bg-red-50 text-red-800 dark:bg-red-950/40 dark:text-red-300 dark:border-red-800",
-                  seen && !isWarning && !isContained && "border-amber-300 bg-amber-50 text-amber-900 dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-800"
+                  !seen && "border-dashed border-gray-200 text-gray-400",
+                  seen && isContained && "border-emerald-400 bg-emerald-50 text-emerald-800",
+                  seen && isWarning && "border-red-400 bg-red-50 text-red-800",
+                  seen && !isWarning && !isContained && "border-amber-300 bg-amber-50 text-amber-900"
                 )}
               >
                 <div className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wide">
@@ -225,7 +225,7 @@ export function CommandCenter({
         </ol>
 
         {alert && (
-          <div className="mt-3 text-xs text-gray-600 dark:text-gray-400">
+          <div className="mt-3 text-xs text-gray-600">
             {contained ? (
               <>
                 Contained after <strong>{filesAtAlert ?? "—"}</strong> files touched on {focusId}. Encryption stopped before

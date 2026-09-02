@@ -9,16 +9,16 @@ import { factorLabel } from "../lib/format";
 
 const VERDICT_UI = {
   critical: {
-    box: "border-red-400 bg-red-50 dark:bg-red-950/40 dark:border-red-800",
-    text: "text-red-700 dark:text-red-300",
+    box: "border-red-400 bg-red-50",
+    text: "text-red-700",
   },
   warning: {
-    box: "border-amber-400 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-800",
-    text: "text-amber-800 dark:text-amber-300",
+    box: "border-amber-400 bg-amber-50",
+    text: "text-amber-800",
   },
   clear: {
-    box: "border-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 dark:border-emerald-800",
-    text: "text-emerald-700 dark:text-emerald-300",
+    box: "border-emerald-400 bg-emerald-50",
+    text: "text-emerald-700",
   },
 } as const;
 
@@ -28,8 +28,8 @@ function EvidenceRow({ item, index }: { item: EvidenceItem; index: number | null
       className={clsx(
         "rounded-lg border px-3 py-2.5",
         item.observed
-          ? "border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900"
-          : "border-dashed border-gray-200 bg-gray-50/60 dark:border-gray-800 dark:bg-gray-900/40"
+          ? "border-gray-200 bg-white"
+          : "border-dashed border-gray-200 bg-gray-50/60"
       )}
     >
       <div className="flex items-start gap-2.5">
@@ -37,8 +37,8 @@ function EvidenceRow({ item, index }: { item: EvidenceItem; index: number | null
           className={clsx(
             "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold",
             item.observed
-              ? "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300"
-              : "bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500"
+              ? "bg-red-100 text-red-700"
+              : "bg-gray-100 text-gray-400"
           )}
         >
           {item.observed ? index : <TbMinus className="h-3 w-3" />}
@@ -49,7 +49,7 @@ function EvidenceRow({ item, index }: { item: EvidenceItem; index: number | null
             <span
               className={clsx(
                 "text-sm font-semibold",
-                item.observed ? "text-gray-900 dark:text-gray-100" : "text-gray-400 dark:text-gray-500"
+                item.observed ? "text-gray-900" : "text-gray-400"
               )}
             >
               {item.title}
@@ -59,8 +59,8 @@ function EvidenceRow({ item, index }: { item: EvidenceItem; index: number | null
                 className={clsx(
                   "rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold",
                   item.observed
-                    ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
-                    : "bg-gray-200 text-gray-500 dark:bg-gray-800 dark:text-gray-500"
+                    ? "bg-gray-900 text-white"
+                    : "bg-gray-200 text-gray-500"
                 )}
                 title={`MITRE ATT&CK — ${item.mitre.name}`}
               >
@@ -83,23 +83,23 @@ function EvidenceRow({ item, index }: { item: EvidenceItem; index: number | null
 
           {item.observed ? (
             <>
-              <div className="mt-1 text-sm text-gray-800 dark:text-gray-200">{item.observation}</div>
+              <div className="mt-1 text-sm text-gray-800">{item.observation}</div>
               {item.detail.length > 0 && (
                 <ul className="mt-1 space-y-0.5">
                   {item.detail.map((d, i) => (
                     <li
                       key={i}
-                      className="break-all font-mono text-[11px] leading-relaxed text-gray-500 dark:text-gray-400"
+                      className="break-all font-mono text-[11px] leading-relaxed text-gray-500"
                     >
                       {d}
                     </li>
                   ))}
                 </ul>
               )}
-              <div className="mt-1 text-[11px] italic text-gray-500 dark:text-gray-400">{item.rationale}</div>
+              <div className="mt-1 text-[11px] italic text-gray-500">{item.rationale}</div>
             </>
           ) : (
-            <div className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">not observed</div>
+            <div className="mt-0.5 text-xs text-gray-400">not observed</div>
           )}
         </div>
       </div>
@@ -136,10 +136,10 @@ export function EvidenceChain({
   let observedIndex = 0;
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-      <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-gray-200 px-4 py-3 dark:border-gray-800">
+    <div className="rounded-xl border border-gray-200 bg-white">
+      <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-gray-200 px-4 py-3">
         <div>
-          <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-gray-900 dark:text-gray-100">
+          <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-gray-900">
             Why We Know
           </h2>
           <p className="mt-0.5 text-xs text-gray-500">
@@ -162,21 +162,21 @@ export function EvidenceChain({
         <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-gray-500">Correlated Verdict</div>
         <div className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <span className={clsx("text-xl font-bold tracking-tight", ui.text)}>{verdict.label}</span>
-          <span className="text-sm tabular-nums text-gray-600 dark:text-gray-400">
+          <span className="text-sm tabular-nums text-gray-600">
             peak risk {verdict.peakScore}/100
             {verdict.score !== verdict.peakScore && ` (currently ${verdict.score})`}
           </span>
         </div>
-        <p className="mt-1.5 text-xs text-gray-700 dark:text-gray-300">{verdict.reasoning}</p>
+        <p className="mt-1.5 text-xs text-gray-700">{verdict.reasoning}</p>
 
         {state && (
-          <div className="mt-2.5 border-t border-black/10 pt-2 dark:border-white/10">
+          <div className="mt-2.5 border-t border-black/10 pt-2">
             <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-gray-500">
               Weighted contribution to score
             </div>
             <div className="flex flex-wrap gap-x-4 gap-y-1">
               {Object.entries(state.risk.weighted_contribution_pct).map(([k, pct]) => (
-                <span key={k} className="text-[11px] tabular-nums text-gray-600 dark:text-gray-400">
+                <span key={k} className="text-[11px] tabular-nums text-gray-600">
                   {factorLabel(k)}: <strong>{pct}</strong>
                 </span>
               ))}

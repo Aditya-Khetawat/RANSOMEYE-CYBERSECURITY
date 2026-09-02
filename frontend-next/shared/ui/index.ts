@@ -14,7 +14,7 @@ export { Select } from "./Select";
 export { VerticalRoundedList } from "./VerticalRoundedList";
 export { ErrorComponent } from "./ErrorComponent";
 export { getCommonPinningStylesAndClassNames } from "./utils/table-utils";
-export { ThemeScript, WatchUpdateTheme, ThemeControl } from "./theme";
+export { ThemeScript, WatchUpdateTheme } from "./theme";
 export { ResizableColumns } from "./ResizableColumns";
 export { KeepLoader } from "./KeepLoader/KeepLoader";
 export { PageTitle } from "./PageTitle";

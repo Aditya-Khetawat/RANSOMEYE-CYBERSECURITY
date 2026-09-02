@@ -9,7 +9,6 @@ import { useFloating } from "@floating-ui/react";
 import { Subtitle } from "@tremor/react";
 import UserAvatar from "./UserAvatar";
 import { useSignOut } from "@/shared/lib/hooks/useSignOut";
-import { ThemeControl } from "@/shared/ui";
 import { ChangePasswordModal } from "./ChangePasswordModal";
 
 const ONBOARDING_FLOW_ID = "flow_FHDz1hit";
@@ -95,10 +94,7 @@ type UserInfoProps = {
 export const UserInfo = ({ session }: UserInfoProps) => {
   return (
     <ul className="space-y-2 p-2">
-      <div className="flex items-center gap-2">
-        {session && <UserDropdown session={session} />}
-        <ThemeControl className="text-sm size-10 flex-shrink-0 flex items-center justify-center font-medium rounded-lg focus:ring focus:ring-orange-300 hover:!bg-stone-200/50" />
-      </div>
+      <div className="flex items-center gap-2">{session && <UserDropdown session={session} />}</div>
     </ul>
   );
 };

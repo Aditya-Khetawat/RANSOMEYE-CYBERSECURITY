@@ -73,9 +73,9 @@ export function NetworkTopology({
   const isolatedId = contained ? alert?.endpoint_id : null;
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
+    <div className="rounded-xl border border-gray-200 bg-white p-4">
       <div className="mb-1 flex items-baseline justify-between">
-        <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-gray-900 dark:text-gray-100">
+        <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-gray-900">
           Network Topology
         </h2>
         <span className="text-[11px] text-gray-400">
@@ -95,13 +95,13 @@ export function NetworkTopology({
             width={116}
             height={36}
             rx={8}
-            className="fill-gray-800 dark:fill-gray-200"
+            className="fill-gray-800"
           />
           <text
             x={DOMAIN_X}
             y={DOMAIN_Y + 5}
             textAnchor="middle"
-            className="fill-white text-[11px] font-bold uppercase tracking-wide dark:fill-gray-900"
+            className="fill-white text-[11px] font-bold uppercase tracking-wide"
           >
             CORP-DOMAIN
           </text>
@@ -119,11 +119,10 @@ export function NetworkTopology({
                 stroke={severed ? "#ef4444" : "#d1d5db"}
                 strokeWidth={severed ? 2 : 1.5}
                 strokeDasharray={severed ? "5 4" : undefined}
-                className={severed ? "" : "dark:stroke-gray-700"}
               />
               {severed && (
                 <g transform={`translate(${(DOMAIN_X + x) / 2}, ${midY})`}>
-                  <circle r={11} fill="#fef2f2" stroke="#ef4444" strokeWidth={1.5} className="dark:fill-red-950" />
+                  <circle r={11} fill="#fef2f2" stroke="#ef4444" strokeWidth={1.5} />
                   <text textAnchor="middle" dominantBaseline="central" className="fill-red-600 text-[12px] font-bold">
                     ✕
                   </text>
@@ -159,15 +158,14 @@ export function NetworkTopology({
                 fillOpacity={severed ? 1 : 0.15}
                 stroke={severed ? "#9ca3af" : c}
                 strokeWidth={isSelected ? 3 : 2}
-                className={severed ? "dark:fill-gray-700" : ""}
               />
-              <text textAnchor="middle" dominantBaseline="central" dy={-2} className="fill-gray-800 text-[15px] dark:fill-gray-100">
+              <text textAnchor="middle" dominantBaseline="central" dy={-2} className="fill-gray-800 text-[15px]">
                 {severed ? "🔒" : isAlert ? "⚠" : "🖥"}
               </text>
               <text
                 textAnchor="middle"
                 y={NODE_R + 14}
-                className="fill-gray-700 text-[10px] font-semibold dark:fill-gray-300"
+                className="fill-gray-700 text-[10px] font-semibold"
               >
                 {ep.id}
               </text>
