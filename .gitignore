@@ -34,3 +34,6 @@ Thumbs.db
 *.log
 .cc-history/
 frontend.zip
+
+# Local generated artifacts
+data/ransomeye/
