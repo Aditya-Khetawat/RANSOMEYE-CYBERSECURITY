@@ -6,6 +6,7 @@
 
 > **Detecting ransomware kill chains before encryption occurs — and collapsing infrastructure alert storms into single, actionable incidents.**
 
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-RansomEye-f97316?style=for-the-badge&logo=vercel&logoColor=white)](https://ransomeye-cybersecurity.vercel.app/)
 [![Prototype Video](https://img.shields.io/badge/🎥_Watch_Prototype_Video-Google_Drive-red?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/drive/folders/18RSrRvkzRuwNheSt646xAK9mw8IgMjFV?usp=drive_link)
 [![Deploy](https://img.shields.io/badge/▶_Run_It-Local_or_Vercel+Render-f97316?style=for-the-badge&logo=vercel&logoColor=white)](#-getting-started)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
@@ -631,6 +632,6 @@ RansomEye was designed and built for next-generation cyber defense and enterpris
 
 **⚡ RansomEye Cyber Security** — *Turning alert storms into actionable intelligence and catching ransomware before encryption.*
 
-[![Live Demo](https://img.shields.io/badge/🌐_Try_RansomEye_Live-f97316?style=for-the-badge&logo=vercel&logoColor=white)](https://hpe-hackathon-alert-correlation-ded-eta.vercel.app)
+[![Live Demo](https://img.shields.io/badge/🌐_Try_RansomEye_Live-f97316?style=for-the-badge&logo=vercel&logoColor=white)](https://ransomeye-cybersecurity.vercel.app/)
 
 </div>
