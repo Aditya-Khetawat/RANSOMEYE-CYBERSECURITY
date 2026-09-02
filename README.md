@@ -6,6 +6,7 @@
 
 > **Detecting ransomware kill chains before encryption occurs — and collapsing infrastructure alert storms into single, actionable incidents.**
 
+[![Prototype Video](https://img.shields.io/badge/🎥_Watch_Prototype_Video-Google_Drive-red?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/drive/folders/18RSrRvkzRuwNheSt646xAK9mw8IgMjFV?usp=drive_link)
 [![Deploy](https://img.shields.io/badge/▶_Run_It-Local_or_Vercel+Render-f97316?style=for-the-badge&logo=vercel&logoColor=white)](#-getting-started)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Next.js](https://img.shields.io/badge/Frontend-Next.js_15-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org)
@@ -41,6 +42,7 @@
 ## 📋 Table of Contents
 
 - [🌟 Executive Summary](#-executive-summary)
+- [🎬 Prototype Video Demo](#-prototype-video-demo)
 - [🏗️ System Architecture](#️-system-architecture)
 - [🛡️ Core 1: Ransomware Early Warning System](#️-core-1-ransomware-early-warning-system)
 - [⚡ Core 2: Intelligent Alert Correlation & Deduplication Engine](#-core-2-intelligent-alert-correlation--deduplication-engine)
@@ -48,7 +50,7 @@
 - [🔍 Pipeline Deep Dive](#-pipeline-deep-dive)
 - [⚡ RansomEye vs. Traditional Tooling](#-ransomeye-vs-traditional-tooling)
 - [✨ Feature Matrix](#-feature-matrix)
-- [🛠️ Technology Stack](#️-technology-stack)
+- [🛠️ Technology Stack](#-technology-stack)
 - [📁 Project Structure](#-project-structure)
 - [🚀 Getting Started](#-getting-started)
 - [🌐 Production Deployment](#-production-deployment)
@@ -87,6 +89,26 @@ Modern enterprise security and SRE teams face two crippling operational challeng
 │ • Live Precision, Recall & FPR metrics  │                           │ • Interactive SRE terminal simulator    │
 └─────────────────────────────────────────┘                           └─────────────────────────────────────────┘
 ```
+
+---
+
+## 🎬 Prototype Video Demo
+
+Watch the complete **RansomEye Prototype Video** demonstrating real-time ransomware behavioral telemetry detection, explainable risk scoring, approval-gated defensive containment, SVG fleet network topology isolation, and Cerebras Llama-3.3-70B Cyber Copilot interactions in action:
+
+<div align="center">
+
+<br/>
+
+[![Watch RansomEye Prototype Video](https://img.shields.io/badge/▶_Watch_RansomEye_Prototype_Video_Demo-Google_Drive-red?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/drive/folders/18RSrRvkzRuwNheSt646xAK9mw8IgMjFV?usp=drive_link)
+
+<br/>
+
+> 🔗 **Google Drive Direct Video Link**: [RansomEye Prototype Video Walkthrough](https://drive.google.com/drive/folders/18RSrRvkzRuwNheSt646xAK9mw8IgMjFV?usp=drive_link)
+
+<br/>
+
+</div>
 
 ---
 
