@@ -41,10 +41,10 @@
 ## 📋 Table of Contents
 
 - [🌟 Executive Summary](#-executive-summary)
+- [🏗️ System Architecture](#️-system-architecture)
 - [🛡️ Core 1: Ransomware Early Warning System](#️-core-1-ransomware-early-warning-system)
 - [⚡ Core 2: Intelligent Alert Correlation & Deduplication Engine](#-core-2-intelligent-alert-correlation--deduplication-engine)
 - [🔬 Mathematical & Machine Learning Foundations](#-mathematical--machine-learning-foundations)
-- [🏗️ System Architecture](#️-system-architecture)
 - [🔍 Pipeline Deep Dive](#-pipeline-deep-dive)
 - [⚡ RansomEye vs. Traditional Tooling](#-ransomeye-vs-traditional-tooling)
 - [✨ Feature Matrix](#-feature-matrix)
@@ -60,32 +60,119 @@
 
 ## 🌟 Executive Summary
 
-Modern enterprise security and SRE teams face two crippling challenges:
+Modern enterprise security and SRE teams face two crippling operational challenges:
 
 1. **Ransomware Attacks execute in seconds.** Traditional EDRs often react *after* widespread file encryption or volume shadow copy deletion has already occurred.
-2. **Alert Storms paralyze SOC & SRE responders.** A single root-cause infrastructure fault (e.g., database timeout) generates hundreds of downstream cascading alerts within minutes, burning critical response time.
+2. **Alert Storms paralyze SOC & SRE responders.** A single root-cause infrastructure fault (e.g., database connection pool exhaustion) generates hundreds of downstream cascading alerts within minutes, burning critical response time.
 
-**RansomEye solves both sides of the operational coin in a unified cyber-defense platform:**
+**RansomEye bridges both sides of cyber defense within a unified, high-performance platform:**
 
 ```
-                  ┌─────────────────────────────────────────────────────────────┐
-                  │                      RANSOMEYE PLATFORM                     │
-                  └──────────────────────────────┬──────────────────────────────┘
-                                                 │
-                  ┌──────────────────────────────┴──────────────────────────────┐
-                  ▼                                                             ▼
-┌───────────────────────────────────────────┐ ┌───────────────────────────────────────────┐
-│     🛡️ RANSOMWARE EARLY WARNING MODULE    │ │   ⚡ ALERT CORRELATION & DEDUP ENGINE     │
-├───────────────────────────────────────────┤ ├───────────────────────────────────────────┤
-│ • Real-time host behavioral telemetry     │ │ • 12-stage automated alert pipeline       │
-│ • File entropy & mass churn tracking      │ │ • Fingerprint hashing & 5-min window dedup│
-│ • Shadow copy & process elevation flags   │ │ • TF-IDF + DBSCAN density clustering      │
-│ • Explainable 0–100 risk score engine     │ │ • Temporal root cause identification      │
-│ • IsolationForest anomaly validation      │ │ • Alert DNA historical incident matching  │
-│ • Approval-gated automated containment    │ │ • AI Remediation Playbooks & SRE runbooks │
-│ • +5m/+10m/+15m encryption impact forecast│ │ • Fleet Network Topology isolation map    │
-│ • Live Precision, Recall & FPR Evaluation │ │ • Interactive SRE terminal simulator      │
-└───────────────────────────────────────────┘ └───────────────────────────────────────────┘
+                               ┌─────────────────────────────────────────┐
+                               │            RANSOMEYE PLATFORM           │
+                               └────────────────────┬────────────────────┘
+                                                    │
+                 ┌──────────────────────────────────┴──────────────────────────────────┐
+                 ▼                                                                     ▼
+┌─────────────────────────────────────────┐                           ┌─────────────────────────────────────────┐
+│  🛡️ RANSOMWARE EARLY WARNING SYSTEM     │                           │  ⚡ ALERT CORRELATION & DEDUP ENGINE    │
+├─────────────────────────────────────────┤                           ├─────────────────────────────────────────┤
+│ • Real-time host behavioral telemetry   │                           │ • 12-stage automated alert pipeline     │
+│ • Extension churn & entropy flip logic  │                           │ • Fingerprint hashing & 5-min window    │
+│ • Shadow copy & process elevation flags │                           │ • TF-IDF + DBSCAN density clustering    │
+│ • Explainable 0–100 risk score engine   │                           │ • Temporal root cause identification    │
+│ • IsolationForest anomaly validation    │                           │ • Alert DNA historical incident matching│
+│ • Approval-gated automated containment  │                           │ • AI Remediation Playbooks & runbooks   │
+│ • +5m/+10m/+15m impact forecast         │                           │ • Blast radius prediction & topology DAG│
+│ • Live Precision, Recall & FPR metrics  │                           │ • Interactive SRE terminal simulator    │
+└─────────────────────────────────────────┘                           └─────────────────────────────────────────┘
+```
+
+---
+
+## 🏗️ System Architecture
+
+The following diagram illustrates RansomEye's end-to-end data flow — from raw endpoint telemetry and multi-source alert ingestion up to the Cerebras AI layer and Next.js 15 presentation dashboard:
+
+```mermaid
+graph TD
+    classDef source fill:#f8fafc,stroke:#64748b,stroke-width:1.5px,color:#0f172a,rx:6,ry:6;
+    classDef engine fill:#f0fdf4,stroke:#16a34a,stroke-width:2px,color:#14532d,rx:6,ry:6;
+    classDef ml fill:#faf5ff,stroke:#9333ea,stroke-width:2px,color:#581c87,rx:6,ry:6;
+    classDef ai fill:#fff7ed,stroke:#ea580c,stroke-width:2px,color:#7c2d12,rx:6,ry:6;
+    classDef ui fill:#f0f9ff,stroke:#0284c7,stroke-width:2px,color:#0c4a6e,rx:6,ry:6;
+
+    subgraph DataIngestion ["📦 Data & Telemetry Ingestion Layer"]
+        HDFSDataset["Loghub HDFS_v1 Dataset<br>(11M Log Lines)"]:::source
+        AIOpsDataset["AIOps Challenge 2020<br>(Fault Injection Logs)"]:::source
+        ChaosGen["Synthetic Alert Generator<br>(5 Microservice Scenarios)"]:::source
+        HostTelemetry["Multi-Vector Endpoint Telemetry<br>(File / Proc / Priv / Net)"]:::source
+    end
+
+    subgraph BackendCore ["⚙️ FastAPI Backend Pipeline Core"]
+        FingerprintDedup["Fingerprint Deduplicator<br>(MD5 Window Hashing)"]:::engine
+        TFIDFEmbedder["TF-IDF Text Vectorizer<br>(Feature Sparse Matrix)"]:::ml
+        DBSCANClusterer["Time-Windowed DBSCAN<br>(Density Spatial Clustering)"]:::ml
+        TemporalRCA["Temporal Root Cause Ranker<br>(Propagation Timeline)"]:::engine
+    end
+
+    subgraph RansomwareCore ["🛡️ Ransomware Early Warning Detection Core"]
+        FeatureExtractor["Rolling Window Extractor<br>(Behavioral Vectors)"]:::ml
+        RiskEngine["Explainable Risk Engine<br>(Weighted 0–100 Score)"]:::ml
+        IsolationForest["IsolationForest ML Model<br>(Unsupervised Anomaly)"]:::ml
+        ContainmentEngine["Defensive Containment Plan<br>(Non-Destructive & Gated)"]:::engine
+        ForecastEngine["Impact Forecast Engine<br>(+5m / +10m / +15m Horizon)"]:::ml
+        EvalEvaluator["Quantitative Evaluator<br>(Precision / Recall / FPR)"]:::engine
+    end
+
+    subgraph IntelligenceLayer ["🧠 AI & Forensic Intelligence Layer"]
+        AlertDNAEngine["Alert DNA Matcher<br>(Cosine Similarity)"]:::ml
+        BlastRadiusModel["Predictive Blast Horizon<br>(Cascade Forecast)"]:::ml
+        XaiRanker["Explainable RCA Ranker<br>(Confidence & Rejection)"]:::ml
+        PlaybookGenerator["Remediation Playbook Gen<br>(Runbooks & Commands)"]:::ml
+        CerebrasCopilot["Cyber SOC Copilot<br>(Cerebras Llama-3.3-70B)"]:::ai
+    end
+
+    subgraph PresentationUI ["🖥️ Next.js 15 App Router Dashboard"]
+        HomeDashboard["Command Center UI<br>(Ransomware Warning / Live Demo)"]:::ui
+        TopologyMap["Hub-and-Spoke SVG Map<br>(Fleet Isolation Topology)"]:::ui
+        EvalDashboard["Evaluation Dashboard<br>(Precision / Recall / Latency)"]:::ui
+        CorrelationViews["Correlation Dashboard<br>(Feed / Clusters / Incidents / DAG)"]:::ui
+        TerminalModal["Interactive Terminal<br>(Dry-Run SRE Simulator)"]:::ui
+    end
+
+    HDFSDataset --> FingerprintDedup
+    AIOpsDataset --> FingerprintDedup
+    ChaosGen --> FingerprintDedup
+    HostTelemetry --> FeatureExtractor
+
+    FingerprintDedup --> TFIDFEmbedder
+    TFIDFEmbedder --> DBSCANClusterer
+    DBSCANClusterer --> TemporalRCA
+
+    FeatureExtractor --> RiskEngine
+    RiskEngine --> IsolationForest
+    IsolationForest --> ContainmentEngine
+    IsolationForest --> ForecastEngine
+    IsolationForest --> EvalEvaluator
+
+    TemporalRCA --> AlertDNAEngine
+    TemporalRCA --> BlastRadiusModel
+    TemporalRCA --> XaiRanker
+    TemporalRCA --> PlaybookGenerator
+    TemporalRCA --> CerebrasCopilot
+
+    ContainmentEngine --> CerebrasCopilot
+
+    ContainmentEngine --> HomeDashboard
+    ForecastEngine --> HomeDashboard
+    EvalEvaluator --> EvalDashboard
+    AlertDNAEngine --> CorrelationViews
+    BlastRadiusModel --> CorrelationViews
+    XaiRanker --> CorrelationViews
+    PlaybookGenerator --> TerminalModal
+    CerebrasCopilot --> HomeDashboard
+    ContainmentEngine --> TopologyMap
 ```
 
 ---
@@ -192,81 +279,6 @@ $$\text{TF-IDF}(t, d, D) = \text{TF}(t, d) \times \log\left(\frac{|D|}{|\{d' \in
 Using cosine distance $d(u, v) = 1 - \frac{u \cdot v}{\|u\|_2 \|v\|_2}$, time-windowed **DBSCAN** forms cluster partitions $\mathcal{C}_k$:
 
 $$\mathcal{N}_{\varepsilon}(p) = \{q \in D \mid \text{dist}(p, q) \le \varepsilon \land |t_p - t_q| \le \Delta T_{\text{window}}\}$$
-
----
-
-## 🏗️ System Architecture
-
-```mermaid
-graph TD
-    classDef frontend fill:#0f172a,stroke:#f97316,stroke-width:2px,color:#f97316,rx:6,ry:6;
-    classDef backend fill:#0f172a,stroke:#10b981,stroke-width:2px,color:#10b981,rx:6,ry:6;
-    classDef ml fill:#0f172a,stroke:#c084fc,stroke-width:2px,color:#c084fc,rx:6,ry:6;
-    classDef ai fill:#0f172a,stroke:#f87171,stroke-width:2px,color:#f87171,rx:6,ry:6;
-    classDef external fill:#1e293b,stroke:#64748b,stroke-width:1px,color:#f8fafc,rx:6,ry:6;
-
-    subgraph DataSources ["📦 Ingestion & Data Sources"]
-        Loghub["Loghub HDFS_v1<br>Real Dataset (11M logs)"]:::external
-        AIOps["AIOps Challenge 2020<br>Real Fault Injection"]:::external
-        TelemetryGen["Host Behavioral Telemetry<br>File / Proc / Priv / Net"]:::external
-    end
-
-    subgraph CoreBackend ["⚙️ FastAPI Core Engine"]
-        DedupEngine["Fingerprint<br>Deduplication Layer"]:::backend
-        VectorEngine["TF-IDF Text<br>Vectorization"]:::ml
-        DbscanEngine["Time-Windowed<br>DBSCAN Clustering"]:::ml
-        RcaEngine["Temporal Root Cause<br>Identifier"]:::backend
-
-        DedupEngine --> VectorEngine
-        VectorEngine --> DbscanEngine
-        DbscanEngine --> RcaEngine
-    end
-
-    subgraph RansomwareCore ["🛡️ Ransomware Early Warning Core"]
-        FeatureExtractor["Rolling Feature<br>Extractor"]:::ml
-        RiskEngine["Explainable Risk<br>Engine (0-100)"]:::ml
-        AnomalyDetector["IsolationForest<br>Anomaly Detector"]:::ml
-        ContainmentEngine["Defensive Containment<br>& Impact Forecast"]:::backend
-        EvalModule["Real-Time Evaluation<br>Precision / Recall / FPR"]:::backend
-
-        FeatureExtractor --> RiskEngine
-        RiskEngine --> AnomalyDetector
-        AnomalyDetector --> ContainmentEngine
-        AnomalyDetector --> EvalModule
-    end
-
-    subgraph IntelligenceLayer ["🧠 AI & Forensic Intelligence"]
-        AlertDNA["Alert DNA<br>Cosine Matcher"]:::ml
-        BlastForecast["Predictive Blast<br>Radius Engine"]:::ml
-        XaiRca["Explainable RCA<br>Confidence Ranker"]:::ml
-        PlaybookGen["AI Remediation<br>Playbook Generator"]:::ml
-        Llamacopilot["Cyber Copilot<br>Cerebras Llama-3.3-70B"]:::ai
-    end
-
-    subgraph FrontendApp ["🖥️ Next.js 15 App Router Dashboard"]
-        UI["RansomEye Interactive UI<br>Vercel Edge"]:::frontend
-    end
-
-    Loghub --> DedupEngine
-    AIOps --> DedupEngine
-    TelemetryGen --> FeatureExtractor
-
-    RcaEngine --> AlertDNA
-    RcaEngine --> BlastForecast
-    RcaEngine --> XaiRca
-    RcaEngine --> PlaybookGen
-    RcaEngine --> Llamacopilot
-
-    ContainmentEngine --> Llamacopilot
-
-    AlertDNA --> UI
-    BlastForecast --> UI
-    XaiRca --> UI
-    PlaybookGen --> UI
-    ContainmentEngine --> UI
-    EvalModule --> UI
-    Llamacopilot --> UI
-```
 
 ---
 
