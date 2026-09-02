@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { GeistSans } from "geist/font/sans";
 import { Text } from "@tremor/react";
 import { useLoadScenario, useRansomEyeState } from "@/entities/ransomeye";
 import type { ScenarioName } from "@/entities/ransomeye";
@@ -72,7 +71,7 @@ export function RansomwareClient() {
   const selectedState = selectedEndpointId ? currentStates[selectedEndpointId] : undefined;
 
   return (
-    <div className={`${GeistSans.className} flex flex-col gap-4`}>
+    <div className="flex flex-col gap-4">
       <div>
         <div className="flex items-center gap-2 mb-1.5">
           <span className="text-[11px] font-semibold tracking-[0.14em] uppercase text-red-500">

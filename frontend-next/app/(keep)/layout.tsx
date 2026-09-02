@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { NextAuthProvider } from "../auth-provider";
-import { Mulish } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
 import { ToastContainer } from "react-toastify";
 import Navbar from "components/navbar/Navbar";
 import { getConfig } from "@/shared/lib/server/getConfig";
@@ -12,12 +12,6 @@ import { ThemeScript, WatchUpdateTheme } from "@/shared/ui";
 import "@/app/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import { PostHogPageView } from "@/shared/ui/PostHogPageView";
-
-// If loading a variable font, you don't need to specify the font weight
-const mulish = Mulish({
-  subsets: ["latin"],
-  display: "swap",
-});
 
 type RootLayoutProps = {
   children: ReactNode;
@@ -33,7 +27,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     // differs from what it rendered server-side.
     <html
       lang="en"
-      className={`bg-gray-50 ${mulish.className}`}
+      className={`bg-gray-50 ${GeistSans.className}`}
       suppressHydrationWarning
     >
       <body className="h-screen flex flex-col lg:grid lg:grid-cols-[192px_30px_auto] xl:grid-cols-[220px_30px_auto] 2xl:grid-cols-[250px_30px_auto] lg:grid-rows-1 lg:has-[aside[data-minimized='true']]:grid-cols-[0px_30px_auto]">
